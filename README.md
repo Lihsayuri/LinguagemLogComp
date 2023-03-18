@@ -124,7 +124,7 @@ radio_check voltas is 45 then >> call use_DRS need drs_usage uso_drs, lap voltas
 EngineOff
 
 
-CHECKRED FLAG
+CHECKERED FLAG
 
 ```
 
