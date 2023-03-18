@@ -55,7 +55,7 @@ IDENTIFIER = (LETTER| "_") , {LETTER | "_" | NUMBER}
 OPERACAO = INT, {("+" | "-"), INT}
 
 
-STRUCTURE = "ITS LIGHTS OUT AND AWAY WE GO", PROGRAM , "CHECKRED FLAG"
+STRUCTURE = "ITS LIGHTS OUT AND AWAY WE GO", PROGRAM , "CHECKERED FLAG"
 
 PROGRAM = {VAR_TYPE, IDENTIFIER, VALUE | "EngineOn", RaceLoop, PROGRAM, "EngineOff"| "SetUp", SetUpFunction, PROGRAM, "Radio_off"|
   "radio_check", radiocheckCondition, PROGRAM, "-Copy!", ["no_response >>", PROGRAM, "-Copy!"], "call", callSetUp, "-Copy!"}
