@@ -65,7 +65,7 @@ STRUCTURE = "ITS LIGHTS OUT AND AWAY WE GO", PROGRAM , "CHECKERED FLAG"
  
 
 
-PROGRAM = {VAR_TYPE, IDENTIFIER, VALUE, "\n" | "EngineOn", RaceLoop, PROGRAM, "EngineOff", "\n"| "SetUp", SetUpFunction, PROGRAM, "Radio_off", "\n"| "radio_check", radiocheckCondition, PROGRAM, "-Copy!", "\n" ,  ["no_response >>", PROGRAM, "-Copy!", "\n"] |
+PROGRAM = {VAR_TYPE, IDENTIFIER, "is",  VALUE, "\n" | "EngineOn", RaceLoop, PROGRAM, "EngineOff", "\n"| "SetUp", SetUpFunction, PROGRAM, "Radio_off", "\n"| "radio_check", radiocheckCondition, PROGRAM, "-Copy!", "\n" ,  ["no_response >>", PROGRAM, "-Copy!", "\n"] |
 "call", callSetUp, "-Copy!","\n"}
 
 RaceLoop = "[", INT, "]"
@@ -90,18 +90,18 @@ callSetUp = IDENTIFIER, "need", VAR_TYPE, IDENTIFIER, {",", VAR_TYPE, IDENTIFIER
 
 ITS LIGHTS OUT AND AWAY WE GO
 
-driver piloto1 Leclerc
-driver_engineer engenheiro_piloto1 Martin Whitmarsh
-team time_piloto1 Ferrari
-grand_prix corrida Bahrain
-expected_sc SC False
-rain_probability chance_chuva 0.2
-drs_usage uso_drs (sector1, 3)
-aggressive_overtaking agressivo (31,50)
-conservative_overtaking conservador (1,28)
-setsOfTyres conjunto {{soft, fresh}, {medium, fresh}, {hard, fresh}, {medium, used}}
-lap voltas 0
-tyres pneu_atual {soft, fresh}
+driver piloto1 is Leclerc
+driver_engineer engenheiro_piloto1 is Martin Whitmarsh
+team time_piloto1 is Ferrari
+grand_prix corrida is Bahrain
+expected_sc SC is False
+rain_probability chance_chuva is 0.2
+drs_usage uso_drs is (sector1, 3)
+aggressive_overtaking agressivo is (31,50)
+conservative_overtaking conservador is (1,28)
+setsOfTyres conjunto is {{soft, fresh}, {medium, fresh}, {hard, fresh}, {medium, used}}
+lap voltas is 0
+tyres pneu_atual is {soft, fresh}
 
 
 SetUp Pitstop need tyres pneu, driver piloto
