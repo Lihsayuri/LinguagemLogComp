@@ -33,8 +33,11 @@ TYRE_STATUS = ("fresh" | "lil_used" | "too_used")
 VAR_TYPE = ("driver" | "driver_engineer" | "team" | "grand_prix" | "expected_sc" | "rain_probability" | "drs_usage" | 
 "aggressive_overtaking" | "conservative_overtaking" | "sets_of_tyres" | "lap" | "tyre")
 
+ATRIBUTE = ("type" | "status" | "availability" | "sector"| "start_lap"| "end_lap" )
 
-VALUE = STRING | INT | FLOAT | BOOLEAN | TUPLE | TYRE | TYRE_SET | OPERACAO
+
+
+VALUE = STRING | INT | FLOAT | BOOLEAN | TUPLE_INT | TUPLE_DRS | TYRE | TYRE_SET | OPERACAO
 
 STRING = {LETTER}
 
@@ -44,7 +47,9 @@ FLOAT = INT, ".", INT
 
 BOOLEAN = ("True" | "False")
 
-TUPLE = "(", (SECTOR | INT), ",", INT, ")"
+TUPLE_INT = "(", INT, ",", INT, ")"
+
+TUPLE_DRS = "(", SECTOR, {",",SECTOR}, ",", INT, ")"
 
 TYRE = "{", TYRE_TYPE, ",", TYRE_STATUS, "}"
 
@@ -52,21 +57,25 @@ TYRE_SET = "{", TYRE, {",", TYRE}, "}"
 
 IDENTIFIER = (LETTER| "_") , {LETTER | "_" | NUMBER}
 
-OPERACAO = INT, {("+" | "-"), INT}
+REF_VAR_ATRIBUTE = ATRIBUTE, "of.", IDENTIFIER
 
+OPERACAO = (INT | IDENTIFIER), {("+" | "-" | "<" | ">"), (INT | IDENTIFIER)}
 
 STRUCTURE = "ITS LIGHTS OUT AND AWAY WE GO", PROGRAM , "CHECKERED FLAG"
+ 
 
-PROGRAM = {VAR_TYPE, IDENTIFIER, VALUE | "EngineOn", RaceLoop, PROGRAM, "EngineOff"| "SetUp", SetUpFunction, PROGRAM, "Radio_off"|
-  "radio_check", radiocheckCondition, PROGRAM, "-Copy!", ["no_response >>", PROGRAM, "-Copy!"], "call", callSetUp, "-Copy!"}
+
+PROGRAM = {VAR_TYPE, IDENTIFIER, VALUE, "\n" | "EngineOn", RaceLoop, PROGRAM, "EngineOff", "\n"| "SetUp", SetUpFunction, PROGRAM, "Radio_off", "\n"| "radio_check", radiocheckCondition, PROGRAM, "-Copy!", "\n" ,  ["no_response >>", PROGRAM, "-Copy!", "\n"] |
+"call", callSetUp, "-Copy!","\n"}
 
 RaceLoop = "[", INT, "]"
 
 SetUpFunction = IDENTIFIER, "need", VAR_TYPE, IDENTIFIER, {",", VAR_TYPE, IDENTIFIER}, "\n", "Radio_on"
 
-radiocheckCondition = IDENTIFIER, "is", VALUE, {"and", IDENTIFIER, "is", VALUE}, "then >>"
+radiocheckCondition = (IDENTIFIER | REF_VAR_ATRIBUTE), ("is"| "in") , (VALUE | IDENTIFIER | REF_VAR_ATRIBUTE), {("and" | "or"), (IDENTIFIER | REF_VAR_ATRIBUTE), ("is"| "in") , (VALUE | IDENTIFIER | REF_VAR_ATRIBUTE)}, "then >>"
 
 callSetUp = IDENTIFIER, "need", VAR_TYPE, IDENTIFIER, {",", VAR_TYPE, IDENTIFIER}
+
 ```
 
 ## Diagrama Sintática da linguagem
@@ -92,7 +101,7 @@ aggressive_overtaking agressivo (31,50)
 conservative_overtaking conservador (1,28)
 setsOfTyres conjunto {{soft, fresh}, {medium, fresh}, {hard, fresh}, {medium, used}}
 lap voltas 0
-tyres pneu_atual {soft, frash}
+tyres pneu_atual {soft, fresh}
 
 
 SetUp Pitstop need tyres pneu, driver piloto
@@ -111,7 +120,7 @@ Radio_off
 
 SetUp use_DRS need drs_usage uso_drs, lap voltas, aggressive_overtaking agressivo
 Radio_on
-radio_check uso_drs is greater_than 0 and voltas in agressivo then >> availabilityof.uso_drs is availabilityof.uso_drs-1
+radio_check uso_drs > 0 and voltas in agressivo then >> availabilityof.uso_drs is availabilityof.uso_drs-1
 Radio_off
 
 EngineOn[voltas]
