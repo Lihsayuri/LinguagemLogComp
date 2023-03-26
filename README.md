@@ -78,7 +78,7 @@ callSetUp = IDENTIFIER, "need", VAR_TYPE, IDENTIFIER, {",", VAR_TYPE, IDENTIFIER
 
 ```
 
-## Diagrama Sintática da linguagem
+## Diagrama Sintático da linguagem
 
 <img src="diagrama_sintatico.drawio.png" width="800" height="600">
 
@@ -99,7 +99,7 @@ rain_probability chance_chuva is 0.2
 drs_usage uso_drs is (sector1, 3)
 aggressive_overtaking agressivo is (31,50)
 conservative_overtaking conservador is (1,28)
-setsOfTyres conjunto is {{soft, fresh}, {medium, fresh}, {hard, fresh}, {medium, used}}
+sets_of_tyres conjunto is {{soft, fresh}, {medium, fresh}, {hard, fresh}, {medium, used}}
 lap voltas is 0
 tyres pneu_atual is {soft, fresh}
 
