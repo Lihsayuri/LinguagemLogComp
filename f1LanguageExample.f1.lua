@@ -9,7 +9,7 @@ rain_probability chance_chuva is 0.2
 drs_usage uso_drs is (sector1, 3)
 aggressive_overtaking agressivo is (31,50)
 conservative_overtaking conservador is (1,28)
-setsOfTyres conjunto is {{soft, fresh}, {medium, fresh}, {hard, fresh}, {medium, used}}
+sets_of_tyres conjunto is {{soft, fresh}, {medium, fresh}, {hard, fresh}, {medium, used}}
 lap voltas is 0
 tyres pneu_atual is {soft, fresh}
 
@@ -48,36 +48,6 @@ CHECKERED FLAG
 
 
 -----------------------------------------------------------------------------------------------------------------
-
-
--- ID      ::= (letter | "_") , { letter | digit | "_" } ;
--- STRING  ::= '"' , { any_character - '"' } , '"' ;
--- NUM     ::= [ "-" ] , integer , [ "." , integer ] ;
--- letter = "A" | "B" | "C" | ... | "X" | "Y" | "Z" | "a" | "b" | "c" | ... | "x" | "y" | "z" ;
--- digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
--- any_character = letter | digit | "_" | "-" | "." | ":" | "+" | "*" | "/" | "=" | "<" | ">" | "!" | "?" ;
--- integer = digit, { digit } ;
-
-
--- <start>            ::= "ITS LIGHTS OUT AND AWAY WE GO" <driver_stmt> <engineer_stmt> <team_stmt> <gp_stmt> <expected_sc_stmt> <rain_prob_stmt> <drs_usage_stmt> <aggressive_overtaking_stmt> <conservative_overtaking_stmt> <sets_of_tyres_stmt> <lap_stmt> <tyres_stmt> <setup_stmt>* <engine_stmt> <checkred_flag_stmt>
--- <driver_stmt>      ::= "driver" ID ID
--- <engineer_stmt>    ::= "driver_engineer" ID ID
--- <team_stmt>        ::= "team" ID ID
--- <gp_stmt>          ::= "grand_prix" ID ID
--- <expected_sc_stmt> ::= "expected_sc" ID BOOL
--- <rain_prob_stmt>   ::= "rain_probability" ID "=" FLOAT
--- <drs_usage_stmt>   ::= "drs_usage" ID "(" STRING "," NUM ")" 
--- <aggressive_overtaking_stmt> ::= "aggressive_overtaking" ID "(" NUM "," NUM ")"
--- <conservative_overtaking_stmt> ::= "conservative_overtaking" ID "(" NUM "," NUM ")"
--- <sets_of_tyres_stmt> ::= "setsOfTyres" ID "{" "{" STRING "," STRING "}" "," "{" STRING "," STRING "}" "," "{" STRING "," STRING "}" "," "{" STRING "," STRING "}" "}"
--- <lap_stmt>         ::= "lap" ID "is" NUM
--- <tyres_stmt>       ::= "tyres" ID "{" STRING "," STRING "}"
--- <setup_stmt>       ::= "setup" ID "need" ID ID "," ID ID <radio_on_stmt> <radio_check_stmt>+ <radio_off_stmt>
--- <radio_on_stmt>    ::= "Radio_on"
--- <radio_off_stmt>   ::= "Radio_off"
--- <radio_check_stmt> ::= "radio_check" ID "is" (NUM | STRING) "then" ">>" ID "is" (NUM | STRING) ( "and" ID "is" (NUM | STRING))? | "no_responde" ">>" ID "is" (NUM | STRING)
--- <engine_stmt>      ::= "EngineOn" "[" ID "]" <radio_check_stmt>*
--- <checkred_flag_stmt> ::= "CHECKRED FLAG"
 
 
 
