@@ -350,8 +350,7 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
  */
 #define YY_DO_BEFORE_ACTION \
 	(yytext_ptr) = yy_bp; \
-	(yytext_ptr) -= (yy_more_len); \
-	yyleng = (int) (yy_cp - (yytext_ptr)); \
+	yyleng = (int) (yy_cp - yy_bp); \
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
@@ -1144,18 +1143,16 @@ int yy_flex_debug = 0;
  * any uses of REJECT which flex missed.
  */
 #define REJECT reject_used_but_not_detected
-static int yy_more_flag = 0;
-static int yy_more_len = 0;
-#define yymore() ((yy_more_flag) = 1)
-#define YY_MORE_ADJ (yy_more_len)
+#define yymore() yymore_used_but_not_detected
+#define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "f1.l"
 #line 2 "f1.l"
 #include <stdio.h>
 int is_identified = 0;
-#line 1158 "lex.yy.c"
-#line 1159 "lex.yy.c"
+#line 1155 "lex.yy.c"
+#line 1156 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -1375,16 +1372,10 @@ YY_DECL
 #line 37 "f1.l"
 
 
-#line 1379 "lex.yy.c"
+#line 1376 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
-		(yy_more_len) = 0;
-		if ( (yy_more_flag) )
-			{
-			(yy_more_len) = (int) ((yy_c_buf_p) - (yytext_ptr));
-			(yy_more_flag) = 0;
-			}
 		yy_cp = (yy_c_buf_p);
 
 		/* Support of yytext. */
@@ -1592,7 +1583,7 @@ YY_RULE_SETUP
 case 31:
 YY_RULE_SETUP
 #line 71 "f1.l"
-{ is_identified = 1; printf("IS: %s\n", yytext); yymore(); }  
+{ is_identified = 1; printf("IS: %s\n", yytext);  return 35; }  
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
@@ -1629,7 +1620,7 @@ YY_RULE_SETUP
 #line 81 "f1.l"
 ECHO;
 	YY_BREAK
-#line 1633 "lex.yy.c"
+#line 1624 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 

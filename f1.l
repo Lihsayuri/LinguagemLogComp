@@ -68,7 +68,7 @@ END_PROGRAM "CHECKERED FLAG"
 "]"                     { printf("CLOSE_BRACKETS: %s \n", yytext); return 30; }
 
 
-"is"                    { is_identified = 1; printf("IS: %s\n", yytext); yymore(); }  
+"is"                    { is_identified = 1; printf("IS: %s\n", yytext);  return 35; }  
 {LETTER}+               { if(is_identified) { printf("STRING: %s\n", yytext); is_identified = 0; return 31; } else { printf("IDENTIFIER: %s\n", yytext); return 32; } }
 {ID}                    { { printf("IDENTIFIER: %s\n", yytext);  return 32; } }
 {NUMBER}+               { printf("INT: %s \n", yytext); return 33; }

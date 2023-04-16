@@ -147,5 +147,10 @@ gcc lex.yy.c -o seu_programa -lfl
 ./seu_programa < teste.txt 
 ```
 
+## Bison : análise sintática
 
-
+```bash
+bison -d f1.y
+gcc -o parser parser.tab.c main.c
+./parser < entrada.txt
+```
