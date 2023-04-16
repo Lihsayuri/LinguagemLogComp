@@ -137,5 +137,15 @@ CHECKERED FLAG
 
 ```
 
+## Flex : análise léxica
+
+Para analisar os tokens que fazem parte do código, foi feito um programa em flex que identifica se o token pertence a linguagem ou não. Esse programa está em `f1.l`. Para compilá-lo e executá-lo basta:
+
+``` bash
+flex f1.l
+gcc lex.yy.c -o seu_programa -lfl
+./seu_programa < teste.txt 
+```
+
 
 
