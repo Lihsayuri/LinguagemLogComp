@@ -15,7 +15,7 @@ SETUP SetUp
 RADIO_ON Radio_on
 RADIO_OFF Radio_off
 RADIO_CHECK radio_check
-SILENCE no_response
+SILENCE no_response >>
 COPY -Copy!
 CALL call
 IN in
@@ -55,7 +55,7 @@ END_PROGRAM "CHECKERED FLAG"
 {THEN}                  { printf("THEN: %s\n", yytext); return 17; }
 {NEED}                  { printf("NEED: %s\n", yytext); return 18; }
 {BOOLEAN}               { printf("BOOLEAN: %s\n", yytext); return 19; }
-{OPERATOR}              { printf("OPERACAO: %s \n", yytext); return 20; }
+{OPERATOR}              { printf("OPERATOR: %s \n", yytext); return 20; }
 {SECTOR}                { printf("SECTOR: %s \n", yytext); return 21; }
 {TYRE_TYPE}             { printf("TYRE_TYPE: %s \n", yytext); return 22; }
 {TYRE_STATUS}           { printf("TYRE_STATUS: %s \n", yytext); return 23; }
