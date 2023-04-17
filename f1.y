@@ -48,10 +48,10 @@ termo: INT
      | IDENTIFIER
      ;
 
-tuple_int: '(' INT ',' INT ')'
-tuple_drs: '(' SECTOR {',' SECTOR} ',' INT ')'
-tyre: '{' TYRE_TYPE ',' TYRE_STATUS '}'
-tyre_set: '{' tyre {',' tyre} '}'
+tuple_int: '(' INT ',' INT ')' ;
+tuple_drs: '(' SECTOR {',' SECTOR} ',' INT ')' ;
+tyre: '{' TYRE_TYPE ',' TYRE_STATUS '}' ;
+tyre_set: '{' tyre {',' tyre} '}' ;
 operacao: termo
         | operacao OPERATOR termo
         ;
@@ -89,10 +89,23 @@ setup: SETUP setupfunction program RADIO_OFF NEWLINE
 setupfunction: IDENTIFIER NEED VAR_TYPE IDENTIFIER {COMMA VAR_TYPE IDENTIFIER} NEWLINE RADIO_ON
        ;
 
-radiocheck: RADIO_CHECK radiocheckcondition program COPY NEWLINE [SILENCE program COPY NEWLINE]
+radiocheck: RADIO_CHECK radiocheckcondition program COPY NEWLINE else '?' NEWLINE
+         ;
+
+else: SILENCE program COPY 
+
+ident_or_ref : IDENTIFIER
+             | REF_VAR_ATRIBUTE
+             ;
+is_in : IS | IN
+      ;
+
+value_ident_ref : value | IDENTIFIER | REF_VAR_ATRIBUTE
+                ;
 
 
-radiocheckcondition: (IDENTIFIER | REF_VAR_ATRIBUTE) (IS | IN) (value | IDENTIFIER | REF_VAR_ATRIBUTE) {LOGICAL (IDENTIFIER | REF_VAR_ATRIBUTE) (IS | IN) (value | IDENTIFIER | REF_VAR_ATRIBUTE)} THEN
+
+radiocheckcondition: ident_or_ref is_in value_ident_ref {LOGICAL ident_or_ref is_in value_ident_ref} THEN
                   ;
 
 call : CALL callsetup COPY NEWLINE

@@ -49,50 +49,50 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    IDENTIFIER = 258,
-    IS = 259,
-    STRING = 260,
-    INT = 261,
-    FLOAT = 262,
-    BOOLEAN = 263,
-    TUPLE_INT = 264,
-    TUPLE_DRS = 265,
-    TYRE = 266,
-    TYRE_SET = 267,
-    VAR_TYPE = 268,
-    SECTOR = 269,
-    TYRE_TYPE = 270,
-    TYRE_STATUS = 271,
-    ATRIBUTE = 272,
-    PLUS = 273,
-    MINUS = 274,
-    LESS = 275,
-    GREATER = 276,
-    LESS_EQUAL = 277,
-    GREATER_EQUAL = 278,
-    STRUCTURE = 279,
-    ENGINE_ON = 280,
-    RACE_LOOP = 281,
-    ENGINE_OFF = 282,
-    SET_UP = 283,
-    RADIO_OFF = 284,
-    RADIO_ON = 285,
-    RADIO_CHECK = 286,
-    REF_VAR_ATRIBUTE = 287,
-    CALL = 288,
-    THEN = 289,
-    ELSE = 290,
-    IN = 291,
-    NEED = 292,
-    COMMA = 293,
-    OR = 294,
-    AND = 295,
-    NOT = 296,
-    LOWER_THAN_ELSE = 297
+    BEGIN_PROGRAM = 258,
+    END_PROGRAM = 259,
+    REF_VAR_ATRIBUTE = 260,
+    VAR_TYPE = 261,
+    LOOP_ON = 262,
+    LOOP_OFF = 263,
+    SETUP = 264,
+    RADIO_ON = 265,
+    RADIO_OFF = 266,
+    RADIO_CHECK = 267,
+    SILENCE = 268,
+    COPY = 269,
+    CALL = 270,
+    IN = 271,
+    LOGICAL = 272,
+    THEN = 273,
+    NEED = 274,
+    BOOLEAN = 275,
+    OPERATOR = 276,
+    SECTOR = 277,
+    TYRE_TYPE = 278,
+    TYRE_STATUS = 279,
+    COMMA = 280,
+    OPEN_PARENTHESIS = 281,
+    CLOSE_PARENTHESIS = 282,
+    OPEN_BRACKETS = 283,
+    CLOSE_BRACKETS = 284,
+    OPEN_BRACES = 285,
+    CLOSE_BRACES = 286,
+    IS = 287,
+    STRING = 288,
+    IDENTIFIER = 289,
+    INT = 290,
+    FLOAT = 291,
+    NEWLINE = 292
   };
 #endif
 
 /* Value type.  */
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+typedef int YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
+#endif
 
 
 extern YYSTYPE yylval;

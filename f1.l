@@ -15,7 +15,7 @@ SETUP SetUp
 RADIO_ON Radio_on
 RADIO_OFF Radio_off
 RADIO_CHECK radio_check
-SILENCE no_response >>
+SILENCE "no_response >>"
 COPY -Copy!
 CALL call
 IN in
