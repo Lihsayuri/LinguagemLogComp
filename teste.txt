@@ -1,6 +1,6 @@
 ITS LIGHTS OUT AND AWAY WE GO
 
-driver piloto1 is Leclerc
+driver is driver Leclerc
 driver_engineer engenheiro_piloto1 is Martin Whitmarsh
 team time_piloto1 is Ferrari
 grand_prix corrida is Bahrain

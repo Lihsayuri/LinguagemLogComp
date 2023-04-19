@@ -1,9 +1,14 @@
 %{
 #include <stdio.h>
 int is_identified = 0;
+int yylex(void);
 %}
 
 %option noyywrap
+
+%{
+#define YYEOF 0
+%}
 
 NUMBER [0-9]
 LETTER [a-zA-Z]
@@ -75,17 +80,18 @@ END_PROGRAM "CHECKERED FLAG"
 {NUMBER}+[.]{NUMBER}+   { printf("FLOAT: %s \n", yytext); return 34; }
 
 [ \t]                   { /* ignora */ }
+
 .                      { printf("ERRO: %s \n", yytext); return 404; }
 
 
 %%
 
-int main() {
+/* int main() {
     int token;
     while ((token = yylex())) {
         /* printf("Token encontrado: %d\n", token); */
         /* não faz nada */
-    }
+    /* }
     return 0;
-}
+} */
 

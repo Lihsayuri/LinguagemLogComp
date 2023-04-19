@@ -151,6 +151,16 @@ gcc lex.yy.c -o seu_programa -lfl
 
 ```bash
 bison -d f1.y
-gcc -o parser parser.tab.c main.c
+gcc -o parser f1.tab.c main.c
 ./parser < entrada.txt
 ```
+
+## Linkando tudo
+
+gcc -c f1.tab.c
+gcc -c f1.c
+gcc -c lex.yy.c
+gcc f1.tab.o f1.o lex.yy.o -o f1
+
+
+
