@@ -157,10 +157,8 @@ gcc -o parser f1.tab.c main.c
 
 ## Linkando tudo
 
-gcc -c f1.tab.c
-gcc -c f1.c
-gcc -c lex.yy.c
-gcc f1.tab.o f1.o lex.yy.o -o f1
+ cc -o f1.tab.c lex.yy.c -lfl -DYYDEBUG
+cc -o f1 f1.tab.c lex.yy.c -lfl -DYYDEBUG
 
 
 

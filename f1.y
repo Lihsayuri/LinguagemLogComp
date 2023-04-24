@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// extern int yylex();
-
+void yyerror(char *s);
+int yylex(void);
 %}
 
 %token BEGIN_PROGRAM
@@ -87,43 +87,47 @@ value: STRING
      | operacao
      ;
 
-structure : BEGIN_PROGRAM program END_PROGRAM
-          ;
 
+structure : BEGIN_PROGRAM NEWLINE program END_PROGRAM NEWLINE
+            {
+                    printf("Seja bem vindo a mais uma corrida de fórmula 1!\n");
+            }
+           ;
 
-program : var_declaration
-         | loop
-         | setup
-         | radiocheck
-         | call
+program : var_declaration program
+         | loop program
+         | setup program
+         | radiocheck program
+         | call program
+         | {printf("Corrida finalizada!");}
          ;
 
-var_declaration: VAR_TYPE IDENTIFIER IS value NEWLINE;
+var_declaration: VAR_TYPE IDENTIFIER IS value NEWLINE {printf("Característica setada!");}
+     ;
 
-loop: LOOP_ON race_loop program LOOP_OFF NEWLINE;
+loop: LOOP_ON race_loop program LOOP_OFF NEWLINE {printf("Regra loop sendo processada!\n");}
+     ;
 
-race_loop: OPEN_BRACKETS INT CLOSE_BRACKETS
+race_loop: OPEN_BRACKETS INT CLOSE_BRACKETS NEWLINE
+           | OPEN_BRACKETS IDENTIFIER CLOSE_BRACKETS NEWLINE
          ;
 
 setup: SETUP setupfunction program RADIO_OFF NEWLINE ;
 
-setupfunction: IDENTIFIER NEED VAR_TYPE IDENTIFIER  NEWLINE RADIO_ON
-               | IDENTIFIER NEED VAR_TYPE IDENTIFIER manyidentifiers NEWLINE RADIO_ON
+setupfunction: IDENTIFIER NEED VAR_TYPE IDENTIFIER  NEWLINE RADIO_ON NEWLINE
+               | IDENTIFIER NEED VAR_TYPE IDENTIFIER manyidentifiers NEWLINE RADIO_ON NEWLINE
        ;
 
 
-radiocheck: RADIO_CHECK radiocheckcondition program COPY NEWLINE else
+radiocheck: RADIO_CHECK radiocheckcondition program COPY NEWLINE else {printf("Regra radiocheck processada!\n");}
          ;
 
 else: SILENCE program COPY NEWLINE
-     | /* vazio, sem produção */
+     | {printf ("Não tem else");}/* vazio, sem produção */
      ;
 ident_or_ref : IDENTIFIER
              | REF_VAR_ATRIBUTE
              ;
-
-/* is_in : IS | IN MUDAR ISSO NO DIAGRAMA
-      ; */
 
 value_ident_ref : value 
                 /* | IDENTIFIER  */
@@ -148,4 +152,16 @@ callsetup: IDENTIFIER NEED VAR_TYPE IDENTIFIER
        ;
 
 %%
+
+
+yyerror(char *s)
+{
+  printf("Erro: %s\n", s);
+}
+
+int main(void)
+{
+  yyparse();
+  return 0;
+}
 
