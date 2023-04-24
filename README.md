@@ -157,8 +157,10 @@ gcc -o parser f1.tab.c main.c
 
 ## Linkando tudo
 
- cc -o f1.tab.c lex.yy.c -lfl -DYYDEBUG
+bison -d f1.y
+flex f1.l
 cc -o f1 f1.tab.c lex.yy.c -lfl -DYYDEBUG
+./f1 < teste.txt
 
 
 
