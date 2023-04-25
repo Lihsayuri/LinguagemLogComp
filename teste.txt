@@ -1,7 +1,7 @@
 ITS LIGHTS OUT AND AWAY WE GO
-driver_engineer engenheiro_piloto1 is MartinWhitmarsh
-team time_piloto1 is Ferrari
-grand_prix corrida is Bahrain
+driver_engineer engenheiro_piloto1 is 'Martin Whitmarsh'
+team time_piloto1 is 'Ferrari'
+grand_prix corrida is 'Bahrain'
 expected_sc SC is False
 rain_probability chance_chuva is 0.2
 drs_usage uso_drs is (sector1,3)
@@ -10,11 +10,6 @@ conservative_overtaking conservador is (1,28)
 lap voltas is 0
 tyre pneuatual is {soft, fresh}
 EngineOn[voltas]
-radio_check voltas is 10 then >> call Pit_stop need tyre pneu_atual, driver piloto1 -Copy!
-radio_check voltas is 16 then >> call use_DRS need drs_usage uso_drs, lap voltas_piloto1, aggressive_overtaking agressivo_piloto1 -Copy!
-radio_check voltas is 21 then >> call Pit_stop need tyre pneu_atual, driver piloto1 -Copy!
-radio_check voltas is 41 then >> call Pit_stop need tyre pneu_atual, driver piloto1 -Copy!
-radio_check voltas is 42 then >> call use_DRS need drs_usage uso_drs, lap voltas_piloto1, aggressive_overtaking agressivo_piloto1 -Copy!
-radio_check voltas is 45 then >> call use_DRS need drs_usage uso_drs, lap voltas_piloto1, aggressive_overtaking agressivo_piloto1 -Copy!
+driver piloto1 is 'Fernando Alonso'
 EngineOff
 CHECKERED FLAG

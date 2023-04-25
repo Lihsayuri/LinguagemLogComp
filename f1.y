@@ -88,28 +88,30 @@ value: STRING
      ;
 
 
-structure : BEGIN_PROGRAM NEWLINE program END_PROGRAM NEWLINE
+structure : BEGIN_PROGRAM NEWLINE program END_PROGRAM 
             {
                     printf("Seja bem vindo a mais uma corrida de fórmula 1!\n");
             }
            ;
 
-program : var_declaration program
-         | loop program
-         | setup program
-         | radiocheck program
-         | call program
-         | {printf("Corrida finalizada!");}
+program : var_declaration program {printf("Regra var_declaration foi processada!\n");}
+         | loop program {printf("Regra loop foi processada!\n");}
+         | setup program      {printf("Regra setup foi processada!\n");}
+         | radiocheck program {printf("Regra radiocheck foi processada!\n");}
+         | call program {printf("Regra call foi processada!\n");}
+         | LOOP_OFF NEWLINE {printf("Regra loop off processada!\n");}
          ;
+
+
 
 var_declaration: VAR_TYPE IDENTIFIER IS value NEWLINE {printf("Característica setada!");}
      ;
 
-loop: LOOP_ON race_loop program LOOP_OFF NEWLINE {printf("Regra loop sendo processada!\n");}
+loop: LOOP_ON race_loop program
      ;
 
-race_loop: OPEN_BRACKETS INT CLOSE_BRACKETS NEWLINE
-           | OPEN_BRACKETS IDENTIFIER CLOSE_BRACKETS NEWLINE
+race_loop: OPEN_BRACKETS INT CLOSE_BRACKETS NEWLINE {printf("Definido o número de voltas!\n");}
+           | OPEN_BRACKETS IDENTIFIER CLOSE_BRACKETS NEWLINE {printf("Definido o número de voltas com identifier!\n");}
          ;
 
 setup: SETUP setupfunction program RADIO_OFF NEWLINE ;

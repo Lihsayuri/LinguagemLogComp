@@ -5,50 +5,6 @@
 extern int yywrap();
 int is_identified = 0;
 %}
-/* 
-%{
-   
-    #define NEWLINE_TOKEN 1
-    #define BEGIN_PROGRAM_TOKEN 2
-    #define END_PROGRAM_TOKEN  3
-    #define REF_VAR_ATRIBUTE_TOKEN  4
-    #define VAR_TYPE_TOKEN  5
-    #define LOOP_ON_TOKEN  6
-    #define LOOP_OFF_TOKEN  7
-    #define SETUP_TOKEN  8
-    #define RADIO_ON_TOKEN  9
-    #define RADIO_OFF_TOKEN  10
-    #define RADIO_CHECK_TOKEN  11
-    #define SILENCE_TOKEN  12
-    #define COPY_TOKEN  13
-    #define CALL_TOKEN  14
-    #define IN_TOKEN  15
-    #define LOGICAL_TOKEN  16
-    #define THEN_TOKEN  17
-    #define NEED_TOKEN  18
-    #define BOOLEAN_TOKEN  19
-    #define OPERATOR_TOKEN  20
-    #define SECTOR_TOKEN  21
-    #define TYRE_TYPE_TOKEN  22
-    #define TYRE_STATUS_TOKEN  23
-    #define COMMA_TOKEN  24
-    #define OPEN_PARENTHESIS_TOKEN  25
-    #define CLOSE_PARENTHESIS_TOKEN  26
-    #define OPEN_BRACES_TOKEN  27
-    #define CLOSE_BRACES_TOKEN  28
-    #define OPEN_BRACKETS_TOKEN  29
-    #define CLOSE_BRACKETS_TOKEN  30
-    #define STRING_TOKEN 31
-    #define IDENTIFIER_TOKEN  32
-    #define INT_TOKEN  33
-    #define FLOAT_TOKEN  34
-    #define IS_TOKEN 35
-
-
-
-    int yylval;
-
-%} */
 
 %{
 #define YYEOF 0
@@ -71,7 +27,7 @@ IN in
 LOGICAL and|or
 THEN "then >>"
 NEED need
-ID  [a-zA-Z_][a-zA-Z0-9_]*|[a-zA-Z_][0-9a-zA-Z_]*[a-zA-Z][a-zA-Z0-9_]*|[a-zA-Z_]*[a-zA-Z][a-zA-Z0-9_]*
+ID  [a-zA-Z_][a-zA-Z0-9_]*
 OPERATOR "+"|"-"|">="|"<="|">"|"<"
 TYRE_TYPE soft|hard|medium
 TYRE_STATUS fresh|lil_used|too_used
@@ -82,9 +38,9 @@ END_PROGRAM "CHECKERED FLAG"
 
 %%
 
-"\n"                    { is_identified = 0; return NEWLINE; }
+"\n"                    { return NEWLINE; }
 {BEGIN_PROGRAM}         { printf("BEGIN_PROGRAM: %s \n", yytext); return BEGIN_PROGRAM; }
-{END_PROGRAM}           { printf("END_PROGRAM: %s \n", yytext); return END_PROGRAM; }
+{END_PROGRAM}           { printf("END_PROGRAM: %s \n", yytext);  yyterminate(); return END_PROGRAM; }
 {ATRIBUTE}"of."{ID}     { printf("REF_VAR_ATRIBUTE: %s\n", yytext); return REF_VAR_ATRIBUTE; }
 {VAR_TYPE}              { printf("VAR_TYPE: %s\n", yytext); return VAR_TYPE; }
 {LOOP_ON}               { printf("LOOP_ON: %s\n", yytext); return LOOP_ON; }
@@ -114,9 +70,9 @@ END_PROGRAM "CHECKERED FLAG"
 "]"                     { printf("CLOSE_BRACKETS: %s \n", yytext); return CLOSE_BRACKETS; }
 
 
-"is"                    { is_identified = 1; printf("IS: %s\n", yytext);  return IS; }  
-{LETTER}+               { if(is_identified) { printf("STRING: %s\n", yytext); is_identified = 0; return STRING; } else { printf("IDENTIFIER: %s\n", yytext); return IDENTIFIER; } }
-{ID}                    { { printf("IDENTIFIER: %s\n", yytext);  return IDENTIFIER; } }
+"is"                    { printf("IS: %s\n", yytext);  return IS; }  
+\'([^\\\n]|(\\.))*\'    { printf("STRING: %s\n", yytext); return STRING; }
+{ID}                    { printf("IDENTIFIER: %s\n", yytext);  return IDENTIFIER;  }
 {NUMBER}+               { printf("INT: %s \n", yytext); return INT; }
 {NUMBER}+[.]{NUMBER}+   { printf("FLOAT: %s \n", yytext); return FLOAT; }
 
