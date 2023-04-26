@@ -1,15 +1,16 @@
 ITS LIGHTS OUT AND AWAY WE GO
+driver piloto1 is 'Leclerc'
 driver_engineer engenheiro_piloto1 is 'Martin Whitmarsh'
 team time_piloto1 is 'Ferrari'
 grand_prix corrida is 'Bahrain'
 expected_sc SC is False
 rain_probability chance_chuva is 0.2
-drs_usage uso_drs is (sector1,3)
+drs_usage uso_drs is (sector1, 3)
 aggressive_overtaking agressivo is (31,50)
 conservative_overtaking conservador is (1,28)
 lap voltas is 0
-tyre pneuatual is {soft, fresh}
+tyre pneu_atual is {soft, fresh}
 EngineOn[voltas]
-driver piloto1 is 'Fernando Alonso'
+radio_check voltas is 10 then >> call Pitstop need tyre pneu_atual, driver piloto1 -Copy!
 EngineOff
 CHECKERED FLAG

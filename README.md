@@ -162,5 +162,7 @@ flex f1.l
 cc -o f1 f1.tab.c lex.yy.c -lfl -DYYDEBUG
 ./f1 < teste.txt
 
+## Para rodar o código de exemplo no llvm:
 
+clang++ -o hello hello.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core`
 

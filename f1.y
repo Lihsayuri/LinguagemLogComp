@@ -6,6 +6,7 @@ void yyerror(char *s);
 int yylex(void);
 %}
 
+
 %token BEGIN_PROGRAM
 %token END_PROGRAM
 %token REF_VAR_ATRIBUTE
@@ -41,7 +42,9 @@ int yylex(void);
 %token INT
 %token FLOAT
 %token NEWLINE
+
 %start structure
+
 
 %%
 
@@ -87,27 +90,25 @@ value: STRING
      | operacao
      ;
 
-
-structure : BEGIN_PROGRAM NEWLINE program END_PROGRAM 
-            {
-                    printf("Seja bem vindo a mais uma corrida de fórmula 1!\n");
-            }
+structure: BEGIN_PROGRAM NEWLINE program  {printf("Regra structure foi processada!\n");}
            ;
 
-program : var_declaration program {printf("Regra var_declaration foi processada!\n");}
+
+program :  var_declaration program{printf("Regra var_declaration foi processada!\n");}
          | loop program {printf("Regra loop foi processada!\n");}
          | setup program      {printf("Regra setup foi processada!\n");}
          | radiocheck program {printf("Regra radiocheck foi processada!\n");}
-         | call program {printf("Regra call foi processada!\n");}
-         | LOOP_OFF NEWLINE {printf("Regra loop off processada!\n");}
+         | call program {printf("Regra call foi processada!\n");} 
+         | LOOP_OFF NEWLINE program {printf("Regra loop off processada!\n");}
+         | END_PROGRAM {printf("Regra end program processada!\n");}
          ;
 
 
 
-var_declaration: VAR_TYPE IDENTIFIER IS value NEWLINE {printf("Característica setada!");}
+var_declaration: VAR_TYPE IDENTIFIER IS value NEWLINE {printf("Característica setada! \n");}
      ;
 
-loop: LOOP_ON race_loop program
+loop: LOOP_ON race_loop 
      ;
 
 race_loop: OPEN_BRACKETS INT CLOSE_BRACKETS NEWLINE {printf("Definido o número de voltas!\n");}

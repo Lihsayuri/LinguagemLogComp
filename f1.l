@@ -34,13 +34,13 @@ TYRE_STATUS fresh|lil_used|too_used
 SECTOR sector1|sector2|sector3
 BOOLEAN True|False 
 BEGIN_PROGRAM "ITS LIGHTS OUT AND AWAY WE GO"
-END_PROGRAM "CHECKERED FLAG"
+END_PROGRAM "CHECKRED FLAG"
 
 %%
 
 "\n"                    { return NEWLINE; }
 {BEGIN_PROGRAM}         { printf("BEGIN_PROGRAM: %s \n", yytext); return BEGIN_PROGRAM; }
-{END_PROGRAM}           { printf("END_PROGRAM: %s \n", yytext);  yyterminate(); return END_PROGRAM; }
+{END_PROGRAM}           { printf("END_PROGRAM: %s \n", yytext); return END_PROGRAM; }
 {ATRIBUTE}"of."{ID}     { printf("REF_VAR_ATRIBUTE: %s\n", yytext); return REF_VAR_ATRIBUTE; }
 {VAR_TYPE}              { printf("VAR_TYPE: %s\n", yytext); return VAR_TYPE; }
 {LOOP_ON}               { printf("LOOP_ON: %s\n", yytext); return LOOP_ON; }
