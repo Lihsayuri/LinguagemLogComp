@@ -1,13 +1,17 @@
-# Linguagem de Fórmula 1 <img src="https://img.shields.io/static/v1?label=Etapa1&message=Finalizado&color=success&style=flat-square&logo=ghost"/>
+# Linguagem de Fórmula 1 <img src="https://img.shields.io/static/v1?label=Etapa2&message=Finalizado&color=success&style=flat-square&logo=ghost"/>
 
 
 ## Feito por :raising_hand_woman:
 
 - Lívia Sayuri Makuta.
 
-## Primeiro objetivo :round_pushpin: :
+## Objetivos do projeto :round_pushpin: :
 
-- 27/Mar/2023: Linguagem estruturada segundo a EBNF - Tarefa #1 da lista.  :heavy_check_mark:
+- 27/Mar/2023: Linguagem estruturada segundo a EBNF - Tarefa #1 da lista. Estruturar a linguagem segundo o padrão EBNF.  :heavy_check_mark:
+- 08/Mai/2023: Análise Léxica e Sintática (sem análise semântica e compilação) - Tarefa #2 da lista. Utilizar as ferramentas Flex e Bison (ou semelhantes) para realizar as etapas de Análise Léxica e Sintática. :heavy_check_mark:
+
+
+## Primeira tarefa
 
 A primeira tarefa do projeto é desenvolver ideias para a linguagem que ainda vai ser lapidada a partir da EBNF.
 
@@ -15,6 +19,21 @@ Nesse sentido pensei em desenvolver uma linguagem de fórmula1 que busca montar 
 Além disso, para ficar mais divertido, o objetivo final do programa é retornar uma possível conversa de rádio a partir da estratégia montada pelo usuário programador. 
 
 Sendo assim existem algumas limitações impostas principalmente por conta do contexto, por exemplo, uma lista não pode ser montada - já que esse tipo de variável nem existe. Todavia, existem variáveis definidas propriamente para o contexto, como tyre e sets_of_tyres.
+
+## Segunda tarefa
+
+A segunda tarefa do projeto é utilizar ferramentas para fazer as análises léxicas e sintática. Nesse caso, com o flex retornei todos os Tokens da linguagem e no Bison os ordenei. Além disso, temos algumas mudanças:
+
+É possível fazer um programa somente com as marcações de end dos blocos. Por exemplo:
+
+``` txt
+ITS LIGHTS OUT AND AWAY WE GO
+Radio_off
+EngineOff
+CHECKRED FLAG
+```
+
+Indicando que tudo está desligado e que nenhuma estratégia foi definida. 
 
 ## EBNF da linguagem
 
