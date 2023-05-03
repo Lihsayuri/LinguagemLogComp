@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-void yyerror(char *s);
+int yyerror(char *s);
 int yylex(void);
 %}
 
@@ -72,6 +72,7 @@ manyidentifiers: COMMA VAR_TYPE IDENTIFIER
 
 termo: INT
      | IDENTIFIER
+     | REF_VAR_ATRIBUTE
      ;
 
 operacao: termo
@@ -108,8 +109,6 @@ program :  var_declaration {printf("Regra var_declaration foi processada!\n");}
          ;
 
 
-
-
 var_declaration: VAR_TYPE IDENTIFIER IS value NEWLINE {printf("Característica setada! \n");}
      ;
 
@@ -131,10 +130,6 @@ ident_or_ref : IDENTIFIER
              | REF_VAR_ATRIBUTE
              ;
 
-value_ident_ref : value 
-                /* | IDENTIFIER  */
-                | REF_VAR_ATRIBUTE
-                ;
 
 radiocheck: RADIO_CHECK radiocheckcondition var_declaration COPY NEWLINE else {printf("Regra radiocheck processada!\n");}
             | RADIO_CHECK radiocheckcondition call COPY NEWLINE else {printf("Regra radiocheck processada! ENTREI NO REF MANO\n");}
@@ -146,14 +141,14 @@ else: SILENCE radiocheckcondition COPY NEWLINE {printf("Regra else processada! E
      ;
 
 radiocheckcondition: ident_or_ref IN ident_or_ref manyconditions; 
-                    | ident_or_ref IS value_ident_ref manyconditions
-                    | ident_or_ref OPERATOR value_ident_ref manyconditions
-                    | ident_or_ref IS ident_or_ref OPERATOR value_ident_ref manyconditions 
+                    | ident_or_ref IS value manyconditions
+                    | ident_or_ref OPERATOR value manyconditions
+                    /* | ident_or_ref IS ident_or_ref OPERATOR value manyconditions  */
                   ;
 
 manyconditions:  LOGICAL ident_or_ref IN ident_or_ref manyconditions
-                | LOGICAL ident_or_ref IS value_ident_ref manyconditions
-                | LOGICAL ident_or_ref OPERATOR value_ident_ref manyconditions
+                | LOGICAL ident_or_ref IS value manyconditions
+                | LOGICAL ident_or_ref OPERATOR value manyconditions
                 | THEN
                 | {printf("Não tem manyconditions");}/* vazio, sem produção */
                 ;
@@ -169,9 +164,10 @@ callsetup: IDENTIFIER NEED VAR_TYPE IDENTIFIER
 %%
 
 
-yyerror(char *s)
+int yyerror(char *s)
 {
   printf("Erro: %s\n", s);
+  return 0;
 }
 
 int main(void)
