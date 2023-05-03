@@ -43,8 +43,7 @@ int yylex(void);
 %token FLOAT
 %token NEWLINE
 
-%start structure
-
+%start beggining
 
 %%
 
@@ -59,15 +58,15 @@ tuple_drs:  OPEN_PARENTHESIS SECTOR COMMA INT CLOSE_PARENTHESIS
            ;
 
 tyre: OPEN_BRACES TYRE_TYPE COMMA TYRE_STATUS CLOSE_BRACES ;
-tyre_set: OPEN_BRACES tyre CLOSE_BRACES
-        | OPEN_BRACES tyre manytires CLOSE_BRACES
+tyre_set: OPEN_BRACES tyre CLOSE_BRACES {printf("Regra tyre_set foi processada! 1 tyre\n");}
+        | OPEN_BRACES tyre manytires CLOSE_BRACES {printf("Regra tyre_set foi processada! many tyres\n");}
         ;
 
 manytires : COMMA tyre
           | COMMA tyre manytires
           ;
 
-manyidentifiers: COMMA VAR_TYPE IDENTIFIER
+manyidentifiers: COMMA VAR_TYPE IDENTIFIER 
                 | COMMA VAR_TYPE IDENTIFIER manyidentifiers
                 ;
 
@@ -88,20 +87,26 @@ value: STRING
      | tyre
      | tyre_set
      | operacao
+     | TYRE_STATUS
+     | TYRE_TYPE
      ;
 
-structure: BEGIN_PROGRAM NEWLINE program  {printf("Regra structure foi processada!\n");}
+
+beggining: BEGIN_PROGRAM NEWLINE structure {printf("Regra beggining foi processada!\n");}
+
+structure: END_PROGRAM  
+           | program structure {printf("Regra structure foi processada!\n");}
            ;
 
-
-program :  var_declaration program{printf("Regra var_declaration foi processada!\n");}
-         | loop program {printf("Regra loop foi processada!\n");}
-         | setup program      {printf("Regra setup foi processada!\n");}
-         | radiocheck program {printf("Regra radiocheck foi processada!\n");}
-         | call program {printf("Regra call foi processada!\n");} 
-         | LOOP_OFF NEWLINE program {printf("Regra loop off processada!\n");}
-         | END_PROGRAM {printf("Regra end program processada!\n");}
+program :  var_declaration {printf("Regra var_declaration foi processada!\n");}
+         | loop  {printf("Regra loop foi processada!\n");}
+         | setup       {printf("Regra setup foi processada!\n");}
+         | radiocheck  {printf("Regra radiocheck foi processada!\n");}
+         | call  {printf("Regra call foi processada!\n");} 
+         | LOOP_OFF NEWLINE {printf("Regra loop off processada!\n");}
+         | RADIO_OFF NEWLINE {printf("Processei tudo no Setup");}
          ;
+
 
 
 
@@ -115,19 +120,13 @@ race_loop: OPEN_BRACKETS INT CLOSE_BRACKETS NEWLINE {printf("Definido o número 
            | OPEN_BRACKETS IDENTIFIER CLOSE_BRACKETS NEWLINE {printf("Definido o número de voltas com identifier!\n");}
          ;
 
-setup: SETUP setupfunction program RADIO_OFF NEWLINE ;
+setup: SETUP setupfunction ;
 
 setupfunction: IDENTIFIER NEED VAR_TYPE IDENTIFIER  NEWLINE RADIO_ON NEWLINE
                | IDENTIFIER NEED VAR_TYPE IDENTIFIER manyidentifiers NEWLINE RADIO_ON NEWLINE
        ;
 
 
-radiocheck: RADIO_CHECK radiocheckcondition program COPY NEWLINE else {printf("Regra radiocheck processada!\n");}
-         ;
-
-else: SILENCE program COPY NEWLINE
-     | {printf ("Não tem else");}/* vazio, sem produção */
-     ;
 ident_or_ref : IDENTIFIER
              | REF_VAR_ATRIBUTE
              ;
@@ -137,17 +136,30 @@ value_ident_ref : value
                 | REF_VAR_ATRIBUTE
                 ;
 
+radiocheck: RADIO_CHECK radiocheckcondition var_declaration COPY NEWLINE else {printf("Regra radiocheck processada!\n");}
+            | RADIO_CHECK radiocheckcondition call COPY NEWLINE else {printf("Regra radiocheck processada! ENTREI NO REF MANO\n");}
+            | RADIO_CHECK radiocheckcondition radiocheckcondition COPY NEWLINE else {printf("Regra radiocheck processada! ENTREI NO REF MANO\n");}
+         ;
+
+else: SILENCE radiocheckcondition COPY NEWLINE {printf("Regra else processada! ENTREI NO REF MANO\n");}
+     | {printf ("Não tem else");}/* vazio, sem produção */
+     ;
+
 radiocheckcondition: ident_or_ref IN ident_or_ref manyconditions; 
                     | ident_or_ref IS value_ident_ref manyconditions
+                    | ident_or_ref OPERATOR value_ident_ref manyconditions
+                    | ident_or_ref IS ident_or_ref OPERATOR value_ident_ref manyconditions 
                   ;
 
 manyconditions:  LOGICAL ident_or_ref IN ident_or_ref manyconditions
                 | LOGICAL ident_or_ref IS value_ident_ref manyconditions
+                | LOGICAL ident_or_ref OPERATOR value_ident_ref manyconditions
                 | THEN
+                | {printf("Não tem manyconditions");}/* vazio, sem produção */
                 ;
 
 
-call : CALL callsetup COPY NEWLINE
+call : CALL callsetup 
      ;
 
 callsetup: IDENTIFIER NEED VAR_TYPE IDENTIFIER 
