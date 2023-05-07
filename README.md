@@ -35,6 +35,8 @@ CHECKRED FLAG
 
 Indicando que tudo está desligado e que nenhuma estratégia foi definida. 
 
+Observação: Troquei tudo para o rply, ambas as versões são iguais, mas a partir da próxima etapa só utilizarei o Rply.
+
 ## EBNF da linguagem
 
 ``` lua
