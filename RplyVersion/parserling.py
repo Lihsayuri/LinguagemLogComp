@@ -1,7 +1,10 @@
 from rply import ParserGenerator
 # from lexer import lgfinal
-# from ast import Node, Structure, VarDec, StringVal
+from astling import Node, Structure, VarDec, StringVal, While
 
+
+node_while = While("while", [])
+onWhile = False
 
 class Parser():
     def __init__(self):
@@ -23,7 +26,17 @@ class Parser():
         @self.pg.production('structure : program structure')
         def structure(p):
             print("Processei o program structure, vem coisa aí")
-            return p 
+            if len(p) == 1:
+                print("Entrei no else do structure")
+                return Structure(p[0], [])  # Retorna um nó Structure com os filhos de p[1]
+            else:
+                print("Entrei no else do structure")
+                structure_node = Node(p[1], [])  # Nó Structure atual
+                program_node = p[0]  # Nó program
+                structure_node.children.append(program_node)  # Adiciona o nó program como filho do nó Structure
+                print("Aqui o structure_node.value: ", structure_node.value)
+                print("Aqui o structure_node.children: ", structure_node.children)
+                return structure_node
 
         @self.pg.production('program : var_declaration')
         @self.pg.production('program : loop')
@@ -34,16 +47,26 @@ class Parser():
         @self.pg.production('program : RADIO_OFF NEWLINE')
         def program(p):
             print("Entrei nas ramificações do program")
-            return p
+            if p[0] == "LOOP_OFF":
+                onWhile = False
+                return node_while
+            return p # Retorna um nó Structure sem filhos
 
         @self.pg.production('var_declaration : VAR_TYPE IDENTIFIER IS value NEWLINE')
         def var_declaration(p):
-            print("vardeclaration processada: ", p)
-            # return VarDec(, [p[1], p[3]])
-            return p
+            node_vardec = VarDec(p[0], [p[1],  p[3]])
+            # p[3].evaluate()
+            print("Aqui o node_vardec.value: ", node_vardec.value)
+            print("Aqui o node_vardec.children: ", node_vardec.children)
+            if onWhile:
+                node_while.children.append(node_vardec)
+            return node_vardec
+            # return p
         
         @self.pg.production('loop : LOOP_ON race_loop')
         def loop(p):
+            onWhile = True
+            node_while = While("while", [])
             print("loop")
             return p
         
@@ -51,6 +74,7 @@ class Parser():
         @self.pg.production('race_loop : OPEN_BRACKETS IDENTIFIER CLOSE_BRACKETS NEWLINE')
         def race_loop(p):
             print("Característica do race_loop: ", p)
+            node_while.children.append(p[1])
 
         @self.pg.production('setup : SETUP setupfunction')
         def setup(p):
@@ -182,6 +206,9 @@ class Parser():
         @self.pg.production('value : TYRE_TYPE')
         def value(p):
             print("Característica do value: ", p)
+            if p[0].gettokentype() == 'STRING':
+                print("Aquii o StringVal : ", p[0].value)
+                return StringVal(p[0].value, [])
             # return StringVal()
             return p
 
