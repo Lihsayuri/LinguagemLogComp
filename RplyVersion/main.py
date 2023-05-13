@@ -4,6 +4,8 @@ from lexerling import Lexer
 from codegenling import CodeGen
 from astling import *
 
+# o uso_drs não vai ser mais uma tupla, vou ter o setor para usar o drs e a disponibilidade 
+
 def evaluate_nodes(nodes):
     for node in nodes:
         if isinstance(node, Node):
@@ -12,10 +14,9 @@ def evaluate_nodes(nodes):
 
 
 text_input = """ ITS LIGHTS OUT AND AWAY WE GO 
+lap conta is 0
 EngineOn[12]
-driver piloto1 is 'Leclerc'
-driver piloto2 is 'Vettel'
-driver piloto3 is 'Hamilton'
+conta2 is conta + 1
 EngineOff
 CHECKRED FLAG"""
 
@@ -25,13 +26,11 @@ tokens = lexer.lex(text_input)
 pg = Parser()
 pg.parse()
 parser = pg.get_parser()
-# parser.parse(tokens).eval()
-parse_tree = parser.parse(tokens)
-evaluate_nodes(parse_tree)
-# for node in parse_tree:
-#     if isinstance(node, Node):
-#         print(node.value)
-#         print(node.children)
+# parse_tree = parser.parse(tokens)
+parse_tree = parser.parse(tokens).evaluate()
+# print(parse_tree.evaluate())
+# evaluate_nodes(parse_tree)
+
 
 for token in tokens:
     print(token)

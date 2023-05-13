@@ -24,10 +24,10 @@ class Lexer():
         # SECTOR sector1|sector2|sector3
         self.lexer.add('SECTOR', r'sector1|sector2|sector3')
 
-        self.lexer.add('REF_VAR_ATRIBUTE', r'(type|status|availability|sector|start_lap|end_lap)(of\.[a-zA-Z_][a-zA-Z0-9_]*)+')
+        # self.lexer.add('REF_VAR_ATRIBUTE', r'(type|status|availability|sector|start_lap|end_lap)(of\.[a-zA-Z_][a-zA-Z0-9_]*)+')
 
         # Atribute - pode ser qualquer um desses : type|status|availability|sector|start_lap|end_lap
-        self.lexer.add('ATRIBUTE', r'type|status|availability|sector|start_lap|end_lap')
+        # self.lexer.add('ATRIBUTE', r'type|status|availability|sector|start_lap|end_lap')
 
          # Var Type: driver|driver_engineer|team|grand_prix|expected_sc|rain_probability|drs_usage|aggressive_overtaking|conservative_overtaking|sets_of_tyres|lap|tyre
         self.lexer.add('VAR_TYPE', r'driver_engineer|driver|team|grand_prix|expected_sc|rain_probability|drs_usage|aggressive_overtaking|conservative_overtaking|sets_of_tyres|lap|tyre')
@@ -72,7 +72,7 @@ class Lexer():
         self.lexer.add('NEED', r'need')
 
         # OPERATOR "+"|"-"|">="|"<="|">"|"<"
-        self.lexer.add('OPERATOR', r'\+|\-|\>=|\<=|\>|\<')
+        self.lexer.add('OPERATOR', r'\+|\-|\>=|\<=|\>|\<|\==')
 
 
         # BOOLEAN True|False 
