@@ -20,6 +20,8 @@ class Parser():
         @self.pg.production('beginning : BEGIN_PROGRAM NEWLINE structure')
         def beginning(p):
             print("Processei o beginning do programa")
+            print(self.structure_node.value)
+            print(self.structure_node.children)
             return self.structure_node
             # return p
         
@@ -27,12 +29,20 @@ class Parser():
         @self.pg.production('structure : program structure')
         def structure(p):
             print("Processei o program structure, vem coisa aí")
+            print("Aqui o p: ", p)
             if len(p) == 2:
                 program_node = p[0]  # Nó program
-                self.structure_node.children.append(program_node)  # Adiciona o nó Structure como filho do nó Structure inicial
-                print("Aqui o structure_node.value: ", self.structure_node.value)
-                print("Aqui o structure_node.children: ", self.structure_node.children)
+                # print("Aqui o program_node.value: ", program_node.value)
+                # print("Aqui o program_node.children: ", program_node.children)
+                if isinstance(program_node, Structure):
+                    return program_node
+                self.structure_node.children.append(program_node)
                 return self.structure_node
+
+                # self.structure_node.children.append(program_node)  # Adiciona o nó Structure como filho do nó Structure inicial
+                # print("Aqui o structure_node.value: ", self.structure_node.value)
+                # print("Aqui o structure_node.children: ", self.structure_node.children)
+                # return self.structure_node
 
         @self.pg.production('program : var_declaration')
         @self.pg.production('program : loop')
@@ -43,9 +53,15 @@ class Parser():
         @self.pg.production('program : RADIO_OFF NEWLINE')
         def program(p):
             print("Processei o program")
+            print("Aqui o p: ", p)
             if len(p) == 2 and p[0].gettokentype() == 'LOOP_OFF':
                 onWhile = False
+                print("Entrei no loop off")
+                print("Aqui o node_while: ", self.node_while)
                 return self.node_while
+            print("Aqui o p[0]: ", p[0])
+            return p[0]
+        
 
         @self.pg.production('var_declaration : VAR_TYPE IDENTIFIER IS value NEWLINE')
         def var_declaration(p):
@@ -58,27 +74,32 @@ class Parser():
                 print("Entrei no while no vardec")
                 self.node_while.children.append(node_vardec)
                 print("Aqui o node_while.children: ", self.node_while.children)
-            return node_vardec
+            else:
+                print("Entrei no else no vardec")
+                return node_vardec
             # return p
         
         @self.pg.production('loop : LOOP_ON race_loop')
         def loop(p):
             self.onWhile = True
             print("loop")
-            return self.structure_node.children.append(self.node_while)
+            return self.structure_node  # antes tava sem, agora funcionou
+            # return self.structure_node.children.append(self.node_while)
         
-        @self.pg.production('race_loop : OPEN_BRACKETS INT CLOSE_BRACKETS NEWLINE')
-        @self.pg.production('race_loop : OPEN_BRACKETS IDENTIFIER CLOSE_BRACKETS NEWLINE')
+        # @self.pg.production('race_loop : OPEN_BRACKETS INT CLOSE_BRACKETS NEWLINE')
+        # @self.pg.production('race_loop : OPEN_BRACKETS IDENTIFIER CLOSE_BRACKETS NEWLINE')
+        @self.pg.production('race_loop : OPEN_BRACKETS termo CLOSE_BRACKETS NEWLINE')
         def race_loop(p):
             self.node_while = While("while", [])
+            self.node_while.children.append(p[1])
             # print("Característica do race_loop: ", p)
-            if p[1].gettokentype() == 'INT':
-                print("Entrei no int no race_loop")
-                print(p[1])
-                self.node_while.children.append(IntVal(p[1], []))
-            else:
-                node_identifier = IdentifierGet(p[1], [])
-                self.node_while.children.append(node_identifier)
+            # if p[1].gettokentype() == 'INT':
+            #     print("Entrei no int no race_loop")
+            #     print(p[1])
+            #     self.node_while.children.append(IntVal(p[1], []))
+            # else:
+            #     node_identifier = IdentifierGet(p[1], [])
+            #     self.node_while.children.append(node_identifier)
 
         
         # @self.pg.production('ident_or_ref : IDENTIFIER')
@@ -228,7 +249,6 @@ class Parser():
                 return IntVal(p[0].value, [])
             if p[0].gettokentype() == 'IDENTIFIER':
                 return IdentifierGet(p[0].value, [])
-            return p
         
         @self.pg.production('operacao : termo')
         @self.pg.production('operacao : operacao OPERATOR termo')

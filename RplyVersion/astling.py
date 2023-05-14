@@ -44,8 +44,9 @@ class Structure(Node):
         inverte = self.children[::-1]
         for child in inverte:
             print("AST Aqui o valor do child: ", child)
-            filho = child[0].evaluate()
-            print("AST Aqui o valor do child: ", filho)
+            if child != None:
+                filho = child.evaluate()
+                print("AST Aqui o valor do child: ", filho)
 
 
 class VarDec(Node):
@@ -64,8 +65,19 @@ class VarDec(Node):
 
 class While(Node):
     def evaluate(self):
-        for i in self.children[0].evaluate():
-            self.children[1].evaluate()
+        print("Entrei no While")
+        print("AST Aqui o valor do self.value: ", self.value)
+        print("AST Aqui o valor do self.children[0]: ", self.children[0])
+        len_children = len(self.children)
+        print("AST Aqui o valor do len_children: ", len_children)
+        if len_children == 1:
+            print(self.children[0].evaluate()[1])
+            for i in range(self.children[0].evaluate()[1]):
+                print("AST Aqui o valor do i: ", i)
+        else:
+            for i in range(self.children[0].evaluate()[1]):
+                print("AST Aqui o valor do i ", i)
+                self.children[1].evaluate()
 
 
 class StringVal(Node):
@@ -74,6 +86,8 @@ class StringVal(Node):
     
 class IntVal(Node):
     def evaluate(self):
+        print("Entrei no IntVal")
+        print("AST Aqui o valor do self.value: ", self.value)
         return ("lap", int(self.value))
 
 class TupleIntVal(Node):

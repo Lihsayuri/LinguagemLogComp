@@ -14,9 +14,9 @@ def evaluate_nodes(nodes):
 
 
 text_input = """ ITS LIGHTS OUT AND AWAY WE GO 
-lap conta is 0
-EngineOn[12]
-conta2 is conta + 1
+lap conta is 1
+EngineOn[conta]
+lap conta2 is 9
 EngineOff
 CHECKRED FLAG"""
 
