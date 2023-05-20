@@ -28,6 +28,9 @@ class SymbolTable:
         return SymbolTable.table[variable]
     
     def setter(variable, value):
+        print("Aquiii a symbol table: ", SymbolTable.table)
+        print("Aquiii a symbol table: ", variable, value)
+
         if SymbolTable.table[variable][0] == value[0]:
             SymbolTable.table[variable] =  value
         else:
@@ -52,9 +55,11 @@ class Structure(Node):
 class VarDec(Node):
     def evaluate(self):
         print("Entrei no VarDec")
+        print("AST Aqui o valor do self.value: ", self.value.value, self.children[0].value.value)
+        print("AST Aqui o valor do self.children: ", self.children[1].evaluate()[1])
         tipo_da_var = self.value.value
         identifier = self.children[0].value.value
-        valor = self.children[1][0].evaluate()[1]
+        valor = self.children[1].evaluate()[1]
 
         print("AST Aqui o valor do self.value: ", tipo_da_var)
         print("AST Aqui o valor do self.children[0]: ", identifier)
@@ -79,6 +84,18 @@ class While(Node):
                 print("AST Aqui o valor do i ", i)
                 self.children[1].evaluate()
 
+class If(Node):
+    def evaluate(self):
+        print("Entrei no If")
+        print("AST Aqui o valor do self.value: ", self.value)
+        print("AST Aqui o valor do self.children[0]: ", self.children[0].value , self.children[0].children)
+        print("AST Aqui o valor do self.children[1]: ", self.children[1])
+        if self.children[0].evaluate()[1]:
+            self.children[1].evaluate()
+        else:
+            if len(self.children) == 3:
+                self.children[2].evaluate()
+
 
 class StringVal(Node):
     def evaluate(self):
@@ -92,7 +109,11 @@ class IntVal(Node):
 
 class TupleIntVal(Node):
     def evaluate(self):
-        return ("tupleint", tuple(self.value))
+        print("Entrei no TupleIntVal")
+        print("AST Aqui o valor do self.value: ", self.value)
+        print("AST Aqui o valor do self.children[0]: ", self.children[0].evaluate()[1])
+        print("AST Aqui o valor do self.children[1]: ", self.children[1].evaluate()[1])
+        return ("conservative_overtaking", (self.children[0].evaluate()[1], self.children[1].evaluate()[1]))
 
 class TupleDRSVal(Node):
     def evaluate(self):
@@ -108,11 +129,14 @@ class BoolVal(Node):
     
 class FloatVal(Node):
     def evaluate(self):
+        print("Entrei no FloatVal")
+        print("AST Aqui o valor do self.value: ", self.value)
         return ("float", float(self.value))
     
 class Identifier(Node):
     def evaluate(self):
-        return ("identifier", self.value)
+        print("IDENTIFIER: ", self.value)
+        SymbolTable.setter(self.value, self.children[0].evaluate())
     
 class IdentifierGet(Node):
     def evaluate(self):
@@ -128,6 +152,8 @@ class BinOp(Node):
         # print("AST Aqui o valor do self.children[1]: ", self.children[1].evaluate())
         filho_esquerda = self.children[0].evaluate()
         filho_direita = self.children[1].evaluate()
+        print("Olha o evaluate do filho 0 no binop: ", filho_esquerda)
+        print("Olha o evaluate do filho 1 no binop: ", filho_direita)
         if self.value.value == "+":
             if filho_esquerda[0] == "lap" and filho_direita[0] == "lap":
                 soma = filho_esquerda[1] + filho_direita[1]
@@ -141,8 +167,14 @@ class BinOp(Node):
                 return ("lap", subtracao)
             else:
                 sys.stderr.write("Erro de tipos: operação de subtração entre tipos incompatíveis")
-        if self.value.value == "==":
+        if self.value.value == "is":
+            print("OLHA O EVALUATE DA COMPARAÇÃO AQUI: ", filho_esquerda[1] == filho_direita[1])
             if filho_esquerda[1] == filho_direita[1]:
+                return ("lap", 1)
+            else:
+                return ("lap", 0)
+        if self.value.value == "in":
+            if all(x in filho_direita[1] for x in filho_esquerda[1]):
                 return ("lap", 1)
             else:
                 return ("lap", 0)
@@ -166,6 +198,7 @@ class BinOp(Node):
                 return ("lap", 1)
             else:
                 return ("lap", 0)
+            
         if self.value.value == "or":
             if filho_esquerda[0] == "lap" and filho_direita[0] == "lap":
                 valor1 = 0

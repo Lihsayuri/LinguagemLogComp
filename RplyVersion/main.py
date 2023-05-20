@@ -14,10 +14,10 @@ def evaluate_nodes(nodes):
 
 
 text_input = """ ITS LIGHTS OUT AND AWAY WE GO 
-lap conta is 1
-EngineOn[conta]
-lap conta2 is 9
-EngineOff
+lap volta is 1
+rain_probability chance_of_rain is 0.2
+conservative_overtaking conservador is (1,28)
+radio_check chance_of_rain is 0.2 then >> conservador is (1,20) -Copy!
 CHECKRED FLAG"""
 
 lexer = Lexer().get_lexer()

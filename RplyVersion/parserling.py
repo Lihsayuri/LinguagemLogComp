@@ -86,66 +86,61 @@ class Parser():
             return self.structure_node  # antes tava sem, agora funcionou
             # return self.structure_node.children.append(self.node_while)
         
-        # @self.pg.production('race_loop : OPEN_BRACKETS INT CLOSE_BRACKETS NEWLINE')
-        # @self.pg.production('race_loop : OPEN_BRACKETS IDENTIFIER CLOSE_BRACKETS NEWLINE')
+
         @self.pg.production('race_loop : OPEN_BRACKETS termo CLOSE_BRACKETS NEWLINE')
         def race_loop(p):
             self.node_while = While("while", [])
             self.node_while.children.append(p[1])
-            # print("Característica do race_loop: ", p)
-            # if p[1].gettokentype() == 'INT':
-            #     print("Entrei no int no race_loop")
-            #     print(p[1])
-            #     self.node_while.children.append(IntVal(p[1], []))
-            # else:
-            #     node_identifier = IdentifierGet(p[1], [])
-            #     self.node_while.children.append(node_identifier)
 
-        
-        # @self.pg.production('ident_or_ref : IDENTIFIER')
-        # @self.pg.production('ident_or_ref : REF_VAR_ATRIBUTE')
-        # def ident_or_ref(p):
-        #     print("Característica do ident_or_ref: ", p )
-        #     return p
-        
 
-        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition var_declaration COPY NEWLINE else')
-        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition call COPY NEWLINE else')
-        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition radiocheckcondition COPY NEWLINE else')
+        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition var_declaration COPY NEWLINE ') #por enquanto tirei o else do final
+        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition call COPY NEWLINE ')
+        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition IDENTIFIER IS value COPY NEWLINE ')
         def radiocheck(p):
+            print("Característica do radiocheck: ", p)
+            node_if = If("if", [])
+            node_if.children.append(p[1])
+            if len(p) == 7:
+                node_identifier = Identifier(p[2].value, [p[4]]) 
+                node_if.children.append(node_identifier)
+            else:
+                node_if.children.append(p[2])
+            print("Filhos do radiocheck: ", node_if.children)
+            # if p[5] != None:
+            #     node_if.children.append(p[5])
+            
+            print("Característica do radiocheck: ", node_if.children)
+            return node_if
             # print("Característica do radiocheck: ", p)
-            return p
         
         @self.pg.production('else : SILENCE radiocheckcondition COPY NEWLINE')
         @self.pg.production('else : ')
         def else_(p):
             # print("Característica do else: ", p)
             return p
-        
-        # @self.pg.production('radiocheckcondition : ident_or_ref IN ident_or_ref manyconditions')
-        # @self.pg.production('radiocheckcondition : ident_or_ref IS value manyconditions')
-        # @self.pg.production('radiocheckcondition : ident_or_ref OPERATOR value manyconditions')
-        # def radiocheckcondition(p):
-        #     print("Característica do radiocheckcondition: ", p)
-        #     return p
-
+    
         @self.pg.production('radiocheckcondition : IDENTIFIER IN IDENTIFIER manyconditions')
         @self.pg.production('radiocheckcondition : IDENTIFIER IS value manyconditions')
         @self.pg.production('radiocheckcondition : IDENTIFIER OPERATOR value manyconditions')
         def radiocheckcondition(p):
             print("Característica do radiocheckcondition: ", p)
-            return p
-                
-        
-        # @self.pg.production('manyconditions : LOGICAL ident_or_ref IN ident_or_ref manyconditions')
-        # @self.pg.production('manyconditions : LOGICAL ident_or_ref IS value manyconditions')
-        # @self.pg.production('manyconditions : LOGICAL ident_or_ref OPERATOR value manyconditions')
-        # @self.pg.production('manyconditions : THEN')
-        # @self.pg.production('manyconditions : ')
-        # def manyconditions(p):
-        #     print("Característica do manyconditions: ", p)
-        #     return p
+            if isinstance(p[0], Token):
+                if p[0].gettokentype() == 'IDENTIFIER':
+                    identifier_node = IdentifierGet(p[0].value, [])
+                    node_comparison = BinOp(p[1], [identifier_node, p[2]])
+   
 
+            if p[3] is not None:
+                node_manyconditions = BinOp(p[3][0], [node_comparison] + p[3][1])
+                print("Aqui o node_manyconditions.value: ", node_manyconditions.value)
+                print("Aqui o node_manyconditions.children: ", node_manyconditions.children)
+                return node_manyconditions
+            else:
+                print("Aqui o node_comparison.value: ", node_comparison.value)
+                print("Aqui o node_comparison.children: ", node_comparison.children)
+                return node_comparison
+            
+                
         @self.pg.production('manyconditions : LOGICAL IDENTIFIER IN IDENTIFIER manyconditions')
         @self.pg.production('manyconditions : LOGICAL IDENTIFIER IS value manyconditions')
         @self.pg.production('manyconditions : LOGICAL IDENTIFIER OPERATOR value manyconditions')
@@ -153,8 +148,22 @@ class Parser():
         @self.pg.production('manyconditions : ')
         def manyconditions(p):
             print("Característica do manyconditions: ", p)
-            return p
-        
+            # lista_manyconditions = []
+            # while p[0] != 'THEN':
+            #     node_comparison = BinOp(p[2], [p[1], p[3]])
+            #     lista_manyconditions.append(node_comparison)
+            #     print("Aqui o node_comparison.value: ", node_comparison.value)
+            #     print("Aqui o node_comparison.children: ", node_comparison.children)
+            if len(p) == 0:
+                return None
+            if isinstance(p[0], Token):
+                if p[0].gettokentype() != 'THEN':
+                    return p[1], (p[0], p[2], p[4])
+                else:
+                    return None
+            else:
+                return p[1], (p[0], p[2], p[4])
+            
 
         ## --------------------------------------------------------------------------------------------------------------------------------
         ## DEFINIÇÕES DE FUNÇÃO
@@ -190,9 +199,9 @@ class Parser():
         @self.pg.production('tuple_int : OPEN_PARENTHESIS INT COMMA INT CLOSE_PARENTHESIS')
         def tuple_int(p):
             print("Característica da tupla: ", )
-            int_node1 = IntVal(p[1], [])
-            int_node2 = IntVal(p[3], [])
-            tuple_int_node = TupleIntVal((int_node1, int_node2), [])
+            int_node1 = IntVal(p[1].value, [])
+            int_node2 = IntVal(p[3].value, [])
+            tuple_int_node = TupleIntVal("tuple_int", [int_node1, int_node2])
             print("Aqui o tuple_int_node.value: ", tuple_int_node.value)
             print("Aqui o tuple_int_node.children: ", tuple_int_node.children)
             return tuple_int_node
@@ -221,18 +230,6 @@ class Parser():
             print("Aqui o TyreVal_node.value: ", TyreVal_node.value)
             print("Aqui o TyreVal_node.children: ", TyreVal_node.children)
             return TyreVal_node
-        
-        # @self.pg.production('tyre_set : OPEN_BRACES tyre CLOSE_BRACES')
-        # @self.pg.production('tyre_set : OPEN_BRACES tyre manytires CLOSE_BRACES')
-        # def tyre_set(p):
-        #     print("Característica do tyre_set: ", p)
-        #     return p
-        
-        # @self.pg.production('manytires : COMMA tyre')
-        # @self.pg.production('manytires : COMMA tyre manytires')
-        # def manytires(p):
-        #     print("Característica do manytires: ", p)
-        #     return p
         
         @self.pg.production('manyidentifiers : COMMA VAR_TYPE IDENTIFIER')
         @self.pg.production('manyidentifiers : COMMA VAR_TYPE IDENTIFIER manyidentifiers')
@@ -277,19 +274,22 @@ class Parser():
         @self.pg.production('value : TYRE_TYPE')
         def value(p):
             print("Característica do value: ", p[0])
-            # confere se é um token 
-            if isinstance(p[0], Token) and p[0] == 'STRING':
-                print("Aquii o StringVal : ", p[0].value)
-                return StringVal(p[0].value, [])
-            if isinstance(p[0], Token) and p[0] == 'FLOAT':
-                print("Aquii o FloatVal : ", p[0].value)
-                return FloatVal(p[0].value, [])
-            if isinstance(p[0], Token) and p[0] == 'BOOLEAN':
-                print("Aquii o BooleanVal : ", p[0].value)
-                return BoolVal(p[0].value, [])
+            if isinstance(p[0], Token) :
+                print("Aqui o p[0].gettokentype(): ", p[0].gettokentype())
+                if p[0].gettokentype() == 'STRING':
+                    print("Aquii o StringVal : ", p[0].value)
+                    return StringVal(p[0].value, [])
+                if p[0].gettokentype() == 'FLOAT':
+                    print("Aquii o FloatVal : ", p[0].value)
+                    return FloatVal(p[0].value, [])
+                if p[0].gettokentype() == 'BOOLEAN':
+                    print("Aquii o BooleanVal : ", p[0].value)
+                    return BoolVal(p[0].value, [])
+                return p[0]
             
             # return StringVal()
-            return p
+            print("Aqui o node.value: ", p)
+            return p[0]
 
 
     
