@@ -31,7 +31,10 @@ class SymbolTable:
         print("Aquiii a symbol table: ", SymbolTable.table)
         print("Aquiii a symbol table: ", variable, value)
 
-        if SymbolTable.table[variable][0] == value[0]:
+        if value[0] == 'string':
+            tipo = SymbolTable.table[variable][0]
+            SymbolTable.table[variable] =  (tipo, value[1])
+        elif SymbolTable.table[variable][0] == value[0]:
             SymbolTable.table[variable] =  value
         else:
             sys.stderr.write("Erro de tipos: atribuição de valor incompatível com o tipo da variável")
@@ -90,16 +93,31 @@ class If(Node):
         print("AST Aqui o valor do self.value: ", self.value)
         print("AST Aqui o valor do self.children[0]: ", self.children[0].value , self.children[0].children)
         print("AST Aqui o valor do self.children[1]: ", self.children[1])
+        print(self.children)
         if self.children[0].evaluate()[1]:
             self.children[1].evaluate()
         else:
             if len(self.children) == 3:
+                print("AST Aqui o valor do self.children[2]: ", self.children[2])
+                print("AST Aqui o valor do self.children[2]: ", self.children[2].value)
+                print("AST Aqui o valor do self.children[2]: ", self.children[2].children)
                 self.children[2].evaluate()
-
-
-class StringVal(Node):
+    
+class DriverVal(Node):
     def evaluate(self):
-        return ("string", str(self.value))
+        return ("driver", str(self.value))
+
+class DriverEngineerVal(Node):
+    def evaluate(self):
+        return ("driver_engineer", str(self.value))
+    
+class TeamVal(Node):
+    def evaluate(self):
+        return ("team", str(self.value))
+    
+class GrandPrixVal(Node):
+    def evaluate(self):
+        return ("grand_prix", str(self.value))
     
 class IntVal(Node):
     def evaluate(self):
@@ -113,7 +131,7 @@ class TupleIntVal(Node):
         print("AST Aqui o valor do self.value: ", self.value)
         print("AST Aqui o valor do self.children[0]: ", self.children[0].evaluate()[1])
         print("AST Aqui o valor do self.children[1]: ", self.children[1].evaluate()[1])
-        return ("conservative_overtaking", (self.children[0].evaluate()[1], self.children[1].evaluate()[1]))
+        return ("overtaking", (self.children[0].evaluate()[1], self.children[1].evaluate()[1]))
 
 class TupleDRSVal(Node):
     def evaluate(self):
@@ -125,18 +143,25 @@ class TyreVal(Node):
     
 class BoolVal(Node):
     def evaluate(self):
-        return ("bool", bool(self.value))
+        return ("expected_sc", bool(self.value))
     
 class FloatVal(Node):
     def evaluate(self):
         print("Entrei no FloatVal")
         print("AST Aqui o valor do self.value: ", self.value)
-        return ("float", float(self.value))
+        return ("rain_probability", float(self.value))
     
 class Identifier(Node):
     def evaluate(self):
         print("IDENTIFIER: ", self.value)
-        SymbolTable.setter(self.value, self.children[0].evaluate())
+        print("IDENTIFIER: ", self.children[0])
+        print("IDENTIFIER: ", type(self.children[0]))
+
+        if isinstance(self.children[0], str): 
+            SymbolTable.setter(self.value, ('string', self.children[0]))
+        else:
+            SymbolTable.setter(self.value, self.children[0].evaluate())
+            
     
 class IdentifierGet(Node):
     def evaluate(self):
@@ -146,61 +171,61 @@ class IdentifierGet(Node):
 class BinOp(Node):
 
     def evaluate(self):
-        # print("Entrei no BinOp")
-        # print("AST Aqui o valor do self.value: ", self.value)
-        # print("AST Aqui o valor do self.children[0]: ", self.children[0].evaluate())
-        # print("AST Aqui o valor do self.children[1]: ", self.children[1].evaluate())
         filho_esquerda = self.children[0].evaluate()
         filho_direita = self.children[1].evaluate()
         print("Olha o evaluate do filho 0 no binop: ", filho_esquerda)
         print("Olha o evaluate do filho 1 no binop: ", filho_direita)
         if self.value.value == "+":
-            if filho_esquerda[0] == "lap" and filho_direita[0] == "lap":
+            if (filho_esquerda[0] == "lap" and filho_direita[0] == "lap") or (filho_esquerda[0] == "rain_probability" and filho_direita[0] == "rain_probability"):
                 soma = filho_esquerda[1] + filho_direita[1]
                 print("OLHA O EVALUATE DA SOMA AQUI: ", soma)
-                return ("lap", soma)
+                return (filho_esquerda[0], soma)
             else:
-                sys.stderr.write("Erro de tipos: operação de soma entre tipos incompatíveis")
+                sys.stderr.write("Erro de tipos: operação de soma entre tipos incompatíveis ou que não podem ser somados")
         if self.value.value == "-":
-            if filho_esquerda[0] == "lap" and filho_direita[0] == "lap":
+            if (filho_esquerda[0] == "lap" and filho_direita[0] == "lap") or (filho_esquerda[0] == "rain_probability" and filho_direita[0] == "rain_probability"):
                 subtracao = filho_esquerda[1] - filho_direita[1]
-                return ("lap", subtracao)
+                return (filho_esquerda[0], subtracao)
             else:
-                sys.stderr.write("Erro de tipos: operação de subtração entre tipos incompatíveis")
+                sys.stderr.write("Erro de tipos: operação de subtração entre tipos incompatíveis ou que não podem ser subtraidos")
         if self.value.value == "is":
             print("OLHA O EVALUATE DA COMPARAÇÃO AQUI: ", filho_esquerda[1] == filho_direita[1])
-            if filho_esquerda[1] == filho_direita[1]:
-                return ("lap", 1)
+            if (filho_esquerda[0] == filho_direita[0]) and (filho_esquerda[1] == filho_direita[1]):
+                return (filho_esquerda[0], 1)
             else:
-                return ("lap", 0)
+                return (filho_esquerda[0], 0)
         if self.value.value == "in":
-            if all(x in filho_direita[1] for x in filho_esquerda[1]):
-                return ("lap", 1)
-            else:
-                return ("lap", 0)
+            if (filho_esquerda[0] == "lap" and filho_direita[0] == "overtaking"):
+                if min(filho_direita[1]) <= filho_esquerda[1] <= max(filho_direita[1]):
+                    return ("lap", 1)
+                else:
+                    return ("lap", 0)
         if self.value.value == ">":
-            if filho_esquerda[1] > filho_direita[1]:
-                return ("lap", 1)
-            else:
-                return ("lap", 0)
+            if (filho_esquerda[0] == "lap" and filho_direita[0] == "lap") or (filho_esquerda[0] == "rain_probability" and filho_direita[0] == "rain_probability"):
+                if filho_esquerda[1] > filho_direita[1]:
+                    return ("lap", 1)
+                else:
+                    return ("lap", 0)
         if self.value.value == "<":
-            if filho_esquerda[1] < filho_direita[1]:
-                return ("lap", 1)
-            else:
-                return ("lap", 0)
+            if (filho_esquerda[0] == "lap" and filho_direita[0] == "lap") or (filho_esquerda[0] == "rain_probability" and filho_direita[0] == "rain_probability"):
+                if filho_esquerda[1] < filho_direita[1]:
+                    return ("lap", 1)
+                else:
+                    return ("lap", 0)
         if self.value.value == ">=":
-            if filho_esquerda[1] >= filho_direita[1]:
-                return ("lap", 1)
-            else:
-                return ("lap", 0)
+            if (filho_esquerda[0] == "lap" and filho_direita[0] == "lap") or (filho_esquerda[0] == "rain_probability" and filho_direita[0] == "rain_probability"):
+                if filho_esquerda[1] >= filho_direita[1]:
+                    return ("lap", 1)
+                else:
+                    return ("lap", 0)
         if self.value.value == "<=":
-            if filho_esquerda[1] <= filho_direita[1]:
-                return ("lap", 1)
-            else:
-                return ("lap", 0)
-            
+            if (filho_esquerda[0] == "lap" and filho_direita[0] == "lap") or (filho_esquerda[0] == "rain_probability" and filho_direita[0] == "rain_probability"):
+                if filho_esquerda[1] <= filho_direita[1]:
+                    return ("lap", 1)
+                else:
+                    return ("lap", 0)
         if self.value.value == "or":
-            if filho_esquerda[0] == "lap" and filho_direita[0] == "lap":
+            if filho_esquerda[0] == "lap" or filho_direita[0] == "lap":
                 valor1 = 0
                 valor2 = 0
                 if filho_esquerda[1] >= 1:

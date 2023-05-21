@@ -30,7 +30,7 @@ class Lexer():
         # self.lexer.add('ATRIBUTE', r'type|status|availability|sector|start_lap|end_lap')
 
          # Var Type: driver|driver_engineer|team|grand_prix|expected_sc|rain_probability|drs_usage|aggressive_overtaking|conservative_overtaking|sets_of_tyres|lap|tyre
-        self.lexer.add('VAR_TYPE', r'driver_engineer|driver|team|grand_prix|expected_sc|rain_probability|drs_usage|aggressive_overtaking|conservative_overtaking|sets_of_tyres|lap|tyre')
+        self.lexer.add('VAR_TYPE', r'driver_engineer|driver|team|grand_prix|expected_sc|rain_probability|drs_usage|overtaking|sets_of_tyres|lap|tyre')
 
         # Loop On: EngineOn
         self.lexer.add('LOOP_ON', r'EngineOn')

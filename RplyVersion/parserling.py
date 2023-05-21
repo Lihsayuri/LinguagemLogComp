@@ -32,17 +32,12 @@ class Parser():
             print("Aqui o p: ", p)
             if len(p) == 2:
                 program_node = p[0]  # Nó program
-                # print("Aqui o program_node.value: ", program_node.value)
-                # print("Aqui o program_node.children: ", program_node.children)
+
                 if isinstance(program_node, Structure):
                     return program_node
                 self.structure_node.children.append(program_node)
                 return self.structure_node
 
-                # self.structure_node.children.append(program_node)  # Adiciona o nó Structure como filho do nó Structure inicial
-                # print("Aqui o structure_node.value: ", self.structure_node.value)
-                # print("Aqui o structure_node.children: ", self.structure_node.children)
-                # return self.structure_node
 
         @self.pg.production('program : var_declaration')
         @self.pg.production('program : loop')
@@ -66,9 +61,23 @@ class Parser():
         @self.pg.production('var_declaration : VAR_TYPE IDENTIFIER IS value NEWLINE')
         def var_declaration(p):
             node_identifier = Identifier(p[1], [])
-            node_vardec = VarDec(p[0], [node_identifier,  p[3]])
-            print("Aqui o node_vardec: ", node_vardec)
-            print("Aqui o node_vardec.children: ", node_vardec.children)
+            # print("VARTYPE AQUIII: ", p[0].value)
+            if (p[0].value == 'driver'):
+                node_driver = DriverVal(p[3], [])
+                node_vardec = VarDec(p[0], [node_identifier, node_driver])
+            elif (p[0].value == 'driver_engineer'):
+                node_driver_engineer = DriverEngineerVal(p[3], [])
+                node_vardec = VarDec(p[0], [node_identifier, node_driver_engineer])
+            elif (p[0].value == 'team'):
+                node_team = TeamVal(p[3], [])
+                node_vardec = VarDec(p[0], [node_identifier, node_team])
+            elif (p[0].value == 'grand_prix'):
+                node_grand_prix = GrandPrixVal(p[3], [])
+                node_vardec = VarDec(p[0], [node_identifier, node_grand_prix])
+            else:
+                node_vardec = VarDec(p[0], [node_identifier,  p[3]])
+                print("Aqui o node_vardec: ", node_vardec)
+                print("Aqui o node_vardec.children: ", node_vardec.children)
 
             if self.onWhile:
                 print("Entrei no while no vardec")
@@ -93,35 +102,55 @@ class Parser():
             self.node_while.children.append(p[1])
 
 
-        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition var_declaration COPY NEWLINE ') #por enquanto tirei o else do final
-        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition call COPY NEWLINE ')
-        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition IDENTIFIER IS value COPY NEWLINE ')
+        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition var_declaration COPY NEWLINE else') #por enquanto tirei o else do final
+        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition call COPY NEWLINE else')
+        @self.pg.production('radiocheck : RADIO_CHECK radiocheckcondition IDENTIFIER IS value COPY NEWLINE else')
         def radiocheck(p):
             print("Característica do radiocheck: ", p)
             node_if = If("if", [])
             node_if.children.append(p[1])
-            if len(p) == 7:
+            if len(p) == 8:
+                print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
                 node_identifier = Identifier(p[2].value, [p[4]]) 
                 node_if.children.append(node_identifier)
+                print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+                print("Aqui o p[7]: ", p[7])
+                if p[7] != None:
+                    print("Aqui o p[7] ENTREI AQUIIII: ", p[7])
+                    node_if.children.append(p[7])
             else:
                 node_if.children.append(p[2])
+                if p[5] != None:
+                    node_if.children.append(p[5])
+
             print("Filhos do radiocheck: ", node_if.children)
-            # if p[5] != None:
-            #     node_if.children.append(p[5])
+
             
             print("Característica do radiocheck: ", node_if.children)
             return node_if
             # print("Característica do radiocheck: ", p)
         
-        @self.pg.production('else : SILENCE radiocheckcondition COPY NEWLINE')
+        @self.pg.production('else : SILENCE var_declaration COPY NEWLINE')
+        @self.pg.production('else : SILENCE call COPY NEWLINE')
+        @self.pg.production('else : SILENCE IDENTIFIER IS value COPY NEWLINE')
         @self.pg.production('else : ')
         def else_(p):
             # print("Característica do else: ", p)
-            return p
+            if len(p) == 0:
+                return None
+            else:
+                if len(p) == 6:
+                    print("Característica do else: ", p)
+                    print("Aqui o p[3]: ", p[3])
+                    print("Aqui o p[1].value: ", p[1].value)
+                    node_identifier = Identifier(p[1].value, [p[3]])
+                    return node_identifier
+                else:
+                    return p[1]
     
-        @self.pg.production('radiocheckcondition : IDENTIFIER IN IDENTIFIER manyconditions')
-        @self.pg.production('radiocheckcondition : IDENTIFIER IS value manyconditions')
-        @self.pg.production('radiocheckcondition : IDENTIFIER OPERATOR value manyconditions')
+        @self.pg.production('radiocheckcondition : IDENTIFIER IN IDENTIFIER THEN')
+        @self.pg.production('radiocheckcondition : IDENTIFIER IS value THEN')
+        @self.pg.production('radiocheckcondition : IDENTIFIER OPERATOR value THEN')
         def radiocheckcondition(p):
             print("Característica do radiocheckcondition: ", p)
             if isinstance(p[0], Token):
@@ -130,40 +159,12 @@ class Parser():
                     node_comparison = BinOp(p[1], [identifier_node, p[2]])
    
 
-            if p[3] is not None:
-                node_manyconditions = BinOp(p[3][0], [node_comparison] + p[3][1])
-                print("Aqui o node_manyconditions.value: ", node_manyconditions.value)
-                print("Aqui o node_manyconditions.children: ", node_manyconditions.children)
-                return node_manyconditions
-            else:
-                print("Aqui o node_comparison.value: ", node_comparison.value)
-                print("Aqui o node_comparison.children: ", node_comparison.children)
-                return node_comparison
+
+            print("Aqui o node_comparison.value: ", node_comparison.value)
+            print("Aqui o node_comparison.children: ", node_comparison.children)
+            return node_comparison
             
                 
-        @self.pg.production('manyconditions : LOGICAL IDENTIFIER IN IDENTIFIER manyconditions')
-        @self.pg.production('manyconditions : LOGICAL IDENTIFIER IS value manyconditions')
-        @self.pg.production('manyconditions : LOGICAL IDENTIFIER OPERATOR value manyconditions')
-        @self.pg.production('manyconditions : THEN')
-        @self.pg.production('manyconditions : ')
-        def manyconditions(p):
-            print("Característica do manyconditions: ", p)
-            # lista_manyconditions = []
-            # while p[0] != 'THEN':
-            #     node_comparison = BinOp(p[2], [p[1], p[3]])
-            #     lista_manyconditions.append(node_comparison)
-            #     print("Aqui o node_comparison.value: ", node_comparison.value)
-            #     print("Aqui o node_comparison.children: ", node_comparison.children)
-            if len(p) == 0:
-                return None
-            if isinstance(p[0], Token):
-                if p[0].gettokentype() != 'THEN':
-                    return p[1], (p[0], p[2], p[4])
-                else:
-                    return None
-            else:
-                return p[1], (p[0], p[2], p[4])
-            
 
         ## --------------------------------------------------------------------------------------------------------------------------------
         ## DEFINIÇÕES DE FUNÇÃO
@@ -201,7 +202,7 @@ class Parser():
             print("Característica da tupla: ", )
             int_node1 = IntVal(p[1].value, [])
             int_node2 = IntVal(p[3].value, [])
-            tuple_int_node = TupleIntVal("tuple_int", [int_node1, int_node2])
+            tuple_int_node = TupleIntVal("overtaking", [int_node1, int_node2])
             print("Aqui o tuple_int_node.value: ", tuple_int_node.value)
             print("Aqui o tuple_int_node.children: ", tuple_int_node.children)
             return tuple_int_node
@@ -277,8 +278,9 @@ class Parser():
             if isinstance(p[0], Token) :
                 print("Aqui o p[0].gettokentype(): ", p[0].gettokentype())
                 if p[0].gettokentype() == 'STRING':
-                    print("Aquii o StringVal : ", p[0].value)
-                    return StringVal(p[0].value, [])
+                    # print("Aquii o StringVal : ", p[0].value)
+                    # return StringVal(p[0].value, [])
+                    return p[0].value
                 if p[0].gettokentype() == 'FLOAT':
                     print("Aquii o FloatVal : ", p[0].value)
                     return FloatVal(p[0].value, [])
@@ -287,7 +289,6 @@ class Parser():
                     return BoolVal(p[0].value, [])
                 return p[0]
             
-            # return StringVal()
             print("Aqui o node.value: ", p)
             return p[0]
 

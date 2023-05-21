@@ -16,8 +16,10 @@ def evaluate_nodes(nodes):
 text_input = """ ITS LIGHTS OUT AND AWAY WE GO 
 lap volta is 1
 rain_probability chance_of_rain is 0.2
-conservative_overtaking conservador is (1,28)
+overtaking conservador is (1,28)
+driver piloto1 is 'Hamilton' 
 radio_check chance_of_rain is 0.2 then >> conservador is (1,20) -Copy!
+no_response >> piloto1 is 'Leclerc' -Copy!
 CHECKRED FLAG"""
 
 lexer = Lexer().get_lexer()
