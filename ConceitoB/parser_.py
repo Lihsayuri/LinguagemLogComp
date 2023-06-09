@@ -172,7 +172,6 @@ class Parser:
                 node_expression = Parser.parseRelExp(Parser.tokenizer)   ### PAREIIII AQUI
                 if Parser.tokenizer.next.type != "NEWLINE" and Parser.tokenizer.next.type != "COPY!":
                     sys.stderr.write("Erro de sintaxe: não terminou a linha no identifier.  Caracter atual: {tokenizer.next.value}")
-                print("Entrei no ASSIGN")
                 return Assign(None, [node_identifier, node_expression])
             else:
                 sys.stderr.write("Erro de sintaxe: falta o equal. Tipo atual: {tokenizer.next.type}. Caracter atual: {tokenizer.next.value}")
@@ -248,11 +247,9 @@ class Parser:
                     sys.stderr.write("Erro de sintaxe: não terminou a linha no end. Tipo atual: {tokenizer.next.type}. Caracter atual: {tokenizer.next.value}")
                     sys.exit(1)
                 # return If("", [node_rel_exp, node_block])
-            print("OLHA O TOKEN AQUI: ", Parser.tokenizer.peek().type)
             if Parser.tokenizer.peek().type == "NO_RESPONSE":
                 Parser.tokenizer.selectNext()
                 Parser.tokenizer.selectNext()
-                print (Parser.tokenizer.next.type)
                 if Parser.tokenizer.next.type != "INDICA":
                     sys.stderr.write("Erro de sintaxe: não terminou o else. Tipo atual: {tokenizer.next.type}. Caracter atual: {tokenizer.next.value}")
                     sys.exit(1)
@@ -270,13 +267,8 @@ class Parser:
                 if Parser.tokenizer.next.type != "NEWLINE":
                     sys.stderr.write("Erro de sintaxe: não terminou a linha no end. Tipo atual: {tokenizer.next.type}. Caracter atual: {tokenizer.next.value}")
                     sys.exit(1)
-                print("Uai. olha aquiii o node_block_else: ", node_block_else)
-                print("Uai. olha aquiii o node_block: ", node_block)
                 return If("", [node_rel_exp, node_block, node_block_else])
             return If("", [node_rel_exp, node_block])
-            # else:
-            #     sys.stderr.write("Erro de sintaxe: falta end ou else. Tipo atual: {tokenizer.next.type}. Caracter atual: {tokenizer.next.value}")
-            #     sys.exit(1)
         elif Parser.tokenizer.next.type == "SETUP":
             Tokenizer.selectNext(Parser.tokenizer)
             if Parser.tokenizer.next.type != "TYPE":
@@ -314,8 +306,6 @@ class Parser:
                                 sys.stderr.write("Erro de sintaxe: falta o identificador no function. Tipo atual: {tokenizer.next.type}. Caracter atual: {tokenizer.next.value}")
                             node_identifier_var = Identifier(Parser.tokenizer.next.value, [])
                             node_var_dec = VarDec(tipo_da_var, [node_identifier_var])
-                            print("node_var_dec: ", node_var_dec)
-
                             lista_var_decs.append(node_var_dec)
                             Parser.tokenizer.selectNext()
                         if Parser.tokenizer.next.type == "CLOSEPAR":
@@ -364,7 +354,7 @@ class Parser:
         root = Parser.parseBlock(Parser.tokenizer)
 
         if Parser.tokenizer.position == len(Parser.tokenizer.source) and Parser.tokenizer.next.type == "FINISH":
-            resultado =  root.evaluate(symbolTable=SymbolTable())
+            resultado =  root.evaluate(symbolTable=FuncTable())
             return resultado
         else:
             sys.stderr.write("Erro de sintaxe: não consumiu tudo no diagrama sintático")

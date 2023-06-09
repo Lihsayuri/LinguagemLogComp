@@ -4,7 +4,6 @@ from tokenizer import *
 from tables import *
 from parser_ import *
 
-# lista_palavras_reservadas = ["println", "readline", "if", "else", "while", "end", "Int", "String", "function", "return" ]   # na PI vai pedir versão 2.1
 class PrePro:
     def filter(source):
         source = re.sub(r"#.*\n", "\n", source)  # remove comentários
@@ -145,8 +144,8 @@ class FuncCall(Node):
         if type != iden.evaluate(funcTable)[0]:
             sys.stderr.write(f"Erro de tipos: tipo de retorno da função '{self.value}' não corresponde ao tipo declarado")
 
-        print("value: ", value)
-        print("type: ", type)
+        # print("value: ", value)
+        # print("type: ", type)
         
         return (type, value)
 
@@ -171,11 +170,8 @@ class Block(Node):
 class While(Node):
     def evaluate(self, symbolTable):
         for i in range(self.children[0].evaluate(symbolTable)[1], self.children[1].evaluate(symbolTable)[1]):
-            # print("i: ", i)
-            # print("self.children[2]: ", self.children[2])
             symbolTable.setter(self.children[0].value, ("lap", i))
             self.children[2].evaluate(symbolTable)
-            # print("Olha o value: ", self.children[0].value)
             
 
 class If(Node):
