@@ -1,4 +1,4 @@
-# Linguagem de Fórmula 1 <img src="https://img.shields.io/static/v1?label=Etapa2&message=Finalizado&color=success&style=flat-square&logo=ghost"/>
+# Linguagem de Fórmula 1 <img src="https://img.shields.io/static/v1?label=ConceitoB&message=Finalizado&color=success&style=flat-square&logo=ghost"/>
 
 
 ## Feito por :raising_hand_woman:
@@ -47,6 +47,8 @@ Para fazer a terceira tarefa - no caso, para o conceito B - implementei o compil
 - Além disso, temos o loop principal da corrida que é inicializado com a volta inicial e a volta final.
 
 No final, o programa vai de maneira divertida indicar ao programador em que posição seu piloto terminou, considerando alguns cenários como safety car e batidas.
+
+**Observação**: Essa entrega está na pasta ConceitoB.
 
 Um exemplo de programa pode ser visto abaixo:
 
