@@ -1,8 +1,55 @@
 import sys
 import re
+import random
 from tokenizer import *
 from tables import *
 from parser_ import *
+
+pontos_posicao = {1: 25, 2: 18, 3: 15, 4: 12, 5: 10, 6: 8, 7: 6, 8: 4, 9: 2, 10: 1}
+
+def posicao_mensagem_final(volta_inicial, volta_final):
+    print("[CHECKRED FLAG]")
+    print("Binotto : Corrida finalizada")
+    posicao_sorteada = random.randint(1, 20)
+    if posicao_sorteada > 10:
+        bateu = random.randint(0, 1)
+        if bateu == 1:
+            print("James : Alô piloto! Infelizmente não pontuamos hoje. Você bateu na volta ", random.randint(volta_inicial, volta_final), " e isso custou a corrida. Espero que esteja tudo bem com você!")
+            print("Equipe : Não foi dessa vez! Vamos para a próxima!")
+        else:
+            print("James : Alô piloto! Infelizmente não pontuamos hoje. A estratégia não foi muito boa.")
+            print("Equipe : Pedimos desculpas, o pitstop foi um pouco demorado e isso custou a corrida. Vamos para a próxima!")
+    elif posicao_sorteada < 10 and posicao_sorteada > 3:
+        safety_car = random.randint(0, 1)
+        if safety_car == 1:
+            print("James : Alô piloto! Bom trabalho! Você terminou na posição ", posicao_sorteada, " então garantimos ", pontos_posicao[posicao_sorteada], " pontos! E ainda tivemos safety car! Parabéns!")
+            print("Equipe : A aposta no safety car nos ajudou! Parabéns!")
+        else:
+            print("James : Alô piloto! Bom trabalho! Você terminou na posição ", posicao_sorteada, " então garantimos ", pontos_posicao[posicao_sorteada], " pontos! Mas não tivemos safety car! Parabéns!")
+            print("Equipe : A aposta na estratégia de pneus nos ajudou! Parabéns!")
+    elif posicao_sorteada == 3:
+        print("[Som da Opera Carmem de Georges Bizet ao fundo e champagne sendo aberto]") 
+        print("James : Alô piloto! Bom trabalho! P3 pra você!! Somamos ", pontos_posicao[posicao_sorteada], " pontos! Parabéns!")
+        print("Equipe : A corrida de hoje foi incrível! Parabéns!")
+    elif posicao_sorteada == 2:
+        print("[Som da Opera Carmem de Georges Bizet ao fundo e champagne sendo aberto]") 
+        print("James : Alô piloto! Bom trabalho! P2 pra você!! Somamos ", pontos_posicao[posicao_sorteada], " pontos! Parabéns!")
+        print("Equipe : A corrida de hoje foi incrível! Na próxima vamos para o primeiro lugar!")
+    elif posicao_sorteada == 1:
+        print("[Som da Opera Carmem de Georges Bizet ao fundo e champagne sendo aberto]") 
+        print("James : YESSSSS!!! P1 ! P1 ! Somamos ", pontos_posicao[posicao_sorteada], " pontos! Parabéns!")
+        print("Binotto : Ainda ganhamos o ponto extra da volta mais rápida! Parabéns!")
+        print("Equipe : Você foi incrível! Rumo ao título!")
+
+    print("Piloto : É isso equipe! Vamos para a próxima!")
+
+
+    # se ele terminar entre 1 e 10, sorteie um número entre 0 e 1. Se der 1, teve safety car e o piloto se deu bem. Mande uma mensagem feliz. Se der 0, mande uma mensagem feliz falando que a estrategia foi boa mas que poderia ter sido melhor e que estavam contando com safety car. Além disso, indique a pontuação obtida.
+    # se ele terminar ou segundo ou terceiro, mande uma mensagem feliz falando que a estrategia foi boa e que o piloto é incrível. Georges Bizet’s opera Carmen toca ao fundo.
+    # se ele terminar em primeiro, mande uma mensagem feliz falando que a estrategia foi boa e que o piloto é incrível. Toca o hino nacional do país do piloto ao fundo.
+
+
+
 
 class PrePro:
     def filter(source):
@@ -130,6 +177,8 @@ class FuncCall(Node):
         new_symbol_table = SymbolTable()
         iden, *args, block = node_funcao[1].children
 
+        print("James : Piloto, na escuta? Temos um Setup novo, o ", iden.value , ",  para você! Box box box!")
+
         filhos_call = self.children #filhos do funcCall
         if len(*args) != len(filhos_call):
             sys.stderr.write(f"Erro de sintaxe: número de argumentos não corresponde ao número de parâmetros da função '{self.value}'")
@@ -169,17 +218,24 @@ class Block(Node):
 
 class While(Node):
     def evaluate(self, symbolTable):
+        print("James : Alô piloto! Vamos começar a corrida! Temos que fazer ", self.children[1].evaluate(symbolTable)[1] - self.children[0].evaluate(symbolTable)[1], " voltas!")
+        print("Engenheiro : Boa sorte! Estratégia de pneus já definida!")
+        print("Equipe : 3, 2, 1, GO!")
         for i in range(self.children[0].evaluate(symbolTable)[1], self.children[1].evaluate(symbolTable)[1]):
             symbolTable.setter(self.children[0].value, ("lap", i))
             self.children[2].evaluate(symbolTable)
-            
+
+        posicao_mensagem_final(self.children[0].evaluate(symbolTable)[1], self.children[1].evaluate(symbolTable)[1])
 
 class If(Node):
     def evaluate(self, symbolTable):
-        if self.children[0].evaluate(symbolTable)[1]:
+        condicao = self.children[0].evaluate(symbolTable)[1]
+        if condicao:
+            print("Engenheiro: Radio check para o piloto. Checagem feita. Positivo!")
             self.children[1].evaluate(symbolTable)
         else:
             if len(self.children) == 3:
+                print("Engenheiro: Radio check para o piloto. Checagem feita. Negativo!")
                 self.children[2].evaluate(symbolTable)
 
 if __name__ == "__main__":
@@ -187,6 +243,7 @@ if __name__ == "__main__":
     with open(sys.argv[1], "r") as file:
         code = file.read()
     
+    print("AS LUZES SE APAGAM E LÁ VAMOS NÓS!")	
     Parser.run(code)
 
 
