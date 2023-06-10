@@ -1,4 +1,4 @@
-# Linguagem de Fórmula 1 <img src="https://img.shields.io/static/v1?label=ConceitoB&message=Finalizado&color=success&style=flat-square&logo=ghost"/>
+# Linguagem de Fórmula 1 - f1Strategy <img src="https://img.shields.io/static/v1?label=ConceitoB&message=Finalizado&color=success&style=flat-square&logo=ghost"/>
 
 
 ## Feito por :raising_hand_woman:
