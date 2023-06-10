@@ -52,6 +52,7 @@ No final, o programa vai de maneira divertida indicar ao programador em que posi
 
 Um exemplo de programa pode ser visto abaixo:
 
+- `teste.txt`:
 ``` 
 START
 driver piloto1 is 'Leclerc'
@@ -72,12 +73,14 @@ EngineOff
 FINISH
 ```
 
-Exemplo de output para o input apresentado: 
+- Output para o input apresentado: 
 
 ```
 AS LUZES SE APAGAM E LÁ VAMOS NÓS!
 Engenheiro : Radio check para o piloto  Leclerc
 Engenheiro : Definindo pneu do tipo:  soft e no estado  fresh para o piloto
+Engenheiro : Lap check para o piloto  0
+Engenheiro : Lap check para o piloto  32
 James : Alô piloto! Vamos começar a corrida! Temos que fazer  32  voltas!
 Engenheiro : Boa sorte! Estratégia de pneus já definida!
 Equipe : 3, 2, 1, GO!
@@ -132,9 +135,107 @@ James : Pneu  hard  no estado  used  continua na pista!
 [CHECKRED FLAG]
 Binotto : Corrida finalizada
 [Som da Opera Carmem de Georges Bizet ao fundo e champagne sendo aberto]
-James : Alô piloto! Bom trabalho! P2 pra você!! Somamos  18  pontos! Parabéns!
-Equipe : A corrida de hoje foi incrível! Na próxima vamos para o primeiro lugar!
+James : YESSSSS!!! P1 ! P1 ! Somamos  25  pontos! Parabéns!
+Binotto : Ainda ganhamos o ponto extra da volta mais rápida! Parabéns!
+Equipe : Você foi incrível! Rumo ao título!
 Piloto : É isso equipe! Vamos para a próxima!
+```
+
+- Outro input - `teste2.txt`:
+
+```
+START
+driver piloto1 is 'Hamilton'
+tyre pneu_atual is {soft, fresh}
+lap voltas is 0
+lap total_voltas is 22
+SetUp driver PitDriver need (driver piloto)
+Radio_on
+radio_check piloto equals 'Hamilton' then >> piloto is 'Verstappen' Copy!
+checked => piloto
+Radio_off
+SetUp tyre PitStop need (tyre pneu)
+Radio_on
+radio_check pneu equals {soft, fresh} then >> pneu is {medium, used} Copy!
+checked => pneu
+Radio_off
+EngineOn[voltas, total_voltas]
+radio_check voltas equals 10 then >> piloto1 is call PitDriver need(piloto1) Copy!
+radio_check voltas + 2 > 20 then >> pneu_atual is call PitStop need(pneu_atual) Copy!
+EngineOff
+FINISH
+```
+
+- Output do `teste2.txt`:
+
+```
+AS LUZES SE APAGAM E LÁ VAMOS NÓS!
+Engenheiro : Radio check para o piloto  Hamilton
+Engenheiro : Definindo pneu do tipo:  soft e no estado  fresh para o piloto
+Engenheiro : Lap check para o piloto  0
+Engenheiro : Lap check para o piloto  22
+James : Alô piloto! Vamos começar a corrida! Temos que fazer  22  voltas!
+Engenheiro : Boa sorte! Estratégia de pneus já definida!
+Equipe : 3, 2, 1, GO!
+James : Continuamos na volta  0  . Tenha paciência!
+James : Alô! Estamos na volta  1  . Segura a posição!
+James : Alô! Estamos na volta  2  . Segura a posição!
+James : Alô! Estamos na volta  3  . Segura a posição!
+James : Alô! Estamos na volta  4  . Segura a posição!
+James : Alô! Estamos na volta  5  . Segura a posição!
+James : Alô! Estamos na volta  6  . Segura a posição!
+James : Alô! Estamos na volta  7  . Segura a posição!
+James : Alô! Estamos na volta  8  . Segura a posição!
+James : Alô! Estamos na volta  9  . Segura a posição!
+James : Alô! Estamos na volta  10  . Segura a posição!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+James : Piloto, na escuta? Temos um Setup novo, o  PitDriver ,  para você! Box box box!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+James : Câmbio, aqui é o James! Trocando  piloto1  para Verstappen
+James : Alô! Estamos na volta  11  . Segura a posição!
+James : Alô! Estamos na volta  12  . Segura a posição!
+James : Alô! Estamos na volta  13  . Segura a posição!
+James : Alô! Estamos na volta  14  . Segura a posição!
+James : Alô! Estamos na volta  15  . Segura a posição!
+James : Alô! Estamos na volta  16  . Segura a posição!
+James : Alô! Estamos na volta  17  . Segura a posição!
+James : Alô! Estamos na volta  18  . Segura a posição!
+James : Alô! Estamos na volta  19  . Segura a posição!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+James : Piloto, na escuta? Temos um Setup novo, o  PitStop ,  para você! Box box box!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+Binotto : Estratégia A é o foco! Trocando o pneu para o tipo medium e no estado used na troca de número 1
+James : Alô! Estamos na volta  20  . Segura a posição!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+James : Piloto, na escuta? Temos um Setup novo, o  PitStop ,  para você! Box box box!
+James : Pneu  medium  no estado  used  continua na pista!
+James : Alô! Estamos na volta  21  . Segura a posição!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+James : Piloto, na escuta? Temos um Setup novo, o  PitStop ,  para você! Box box box!
+James : Pneu  medium  no estado  used  continua na pista!
+[CHECKRED FLAG]
+Binotto : Corrida finalizada
+James : Alô piloto! Infelizmente não pontuamos hoje. Você bateu na volta  21  e isso custou a corrida. Espero que esteja tudo bem com você!
+Equipe : Não foi dessa vez! Terminamos em  13 . Vamos para a próxima!
+Piloto : É isso equipe! Vamos para a próxima!
+```
+
+- Por fim, mais um input do terceiro exemplo `teste3.txt`:
+
+```
+START
+lap volta is 12
+lap volta_grande is 2 > 3
+driver piloto1 is 'Hamilton'
+FINISH
+```
+
+- Output do `teste3.txt`:
+```
+AS LUZES SE APAGAM E LÁ VAMOS NÓS!
+Engenheiro : Lap check para o piloto  12
+Engenheiro : Lap check para o piloto  0
+Engenheiro : Radio check para o piloto  Hamilton
 ```
 
 ## EBNF da linguagem

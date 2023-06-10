@@ -14,6 +14,8 @@ class FuncTable:
             if type == "tyre":
                 if len(value) == 2:
                     print("Engenheiro : Definindo pneu do tipo: " , value[0], "e no estado ", value[1], "para o piloto")
+        elif type == "lap":
+            print("Engenheiro : Lap check para o piloto ", value)
 
     def prints_setter(self, valor_antigo, variable, value):
         if hasattr(value, '__len__'):

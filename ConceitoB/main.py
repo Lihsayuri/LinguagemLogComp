@@ -108,7 +108,7 @@ class LapVal(Node):
     
 class StringVal(Node):
     def evaluate(self, symbolTable):
-        return ("String", self.value)
+        return ("driver", self.value)
     
 class TyreVal(Node):
     def evaluate(self, symbolTable):

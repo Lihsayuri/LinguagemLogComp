@@ -1,0 +1,20 @@
+START
+driver piloto1 is 'Hamilton'
+tyre pneu_atual is {soft, fresh}
+lap voltas is 0
+lap total_voltas is 22
+SetUp driver PitDriver need (driver piloto)
+Radio_on
+radio_check piloto equals 'Hamilton' then >> piloto is 'Verstappen' Copy!
+checked => piloto
+Radio_off
+SetUp tyre PitStop need (tyre pneu)
+Radio_on
+radio_check pneu equals {soft, fresh} then >> pneu is {medium, used} Copy!
+checked => pneu
+Radio_off
+EngineOn[voltas, total_voltas]
+radio_check voltas equals 10 then >> piloto1 is call PitDriver need(piloto1) Copy!
+radio_check voltas + 2 > 20 then >> pneu_atual is call PitStop need(pneu_atual) Copy!
+EngineOff
+FINISH

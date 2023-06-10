@@ -1,0 +1,5 @@
+START
+lap volta is 12
+lap volta_grande is 2 > 3
+driver piloto1 is 'Hamilton'
+FINISH
