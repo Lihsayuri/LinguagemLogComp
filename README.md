@@ -37,6 +37,105 @@ Indicando que tudo está desligado e que nenhuma estratégia foi definida.
 
 Observação: Troquei tudo para o rply, ambas as versões são iguais, mas a partir da próxima etapa só utilizarei o Rply.
 
+## Terceira tarefa
+
+Para fazer a terceira tarefa - no caso, para o conceito B - implementei o compilador da linguagem em Python com base no que aprendemos com o compilador desenvolvido na disciplina. A linguagem sofreu alterações importantes:
+
+- Agora existem apenas 3 tipos de variáveis: lap (INT), driver (String), tyre ({tipo do pneu, status do pneu})
+- O objetivo é criar estratégias de troca de pneu. Para isso temos condições que podem ser feitas com o `radio_check` e temos `Setup`s que podem ser construídos e chamados durantes voltas específicas da corrida.
+- Além disso, temos o loop principal da corrida que possui a volta inicial e a volta final.
+- Temos operações como +, -, >, < , igualdade.
+
+No final, o programa vai de maneira divertida indicar ao programador em que posição seu piloto terminou, considerando alguns cenários como safety car e batidas.
+
+Um exemplo de programa pode ser visto abaixo:
+
+``` 
+START
+driver piloto1 is 'Leclerc'
+tyre pneu_atual is {soft, fresh}
+lap voltas is 0
+lap total_voltas is 32
+SetUp tyre Pitstop need (tyre pneu)
+Radio_on
+lap voltinha is 10
+radio_check pneu equals {soft, fresh} then >> pneu is {medium, fresh} Copy!
+no_response >> pneu is {hard, used} Copy!
+checked => pneu
+Radio_off
+EngineOn[voltas, total_voltas]
+radio_check voltas equals 10 then >> pneu_atual is call Pitstop need(pneu_atual) Copy!
+radio_check voltas + 2 > 30 then >> pneu_atual is call Pitstop need(pneu_atual) Copy!
+EngineOff
+FINISH
+```
+
+
+Exemplo de output para o input apresentado: 
+
+```
+AS LUZES SE APAGAM E LÁ VAMOS NÓS!
+Engenheiro : Radio check para o piloto  Leclerc
+Engenheiro : Definindo pneu do tipo:  soft e no estado  fresh para o piloto
+James : Alô piloto! Vamos começar a corrida! Temos que fazer  32  voltas!
+Engenheiro : Boa sorte! Estratégia de pneus já definida!
+Equipe : 3, 2, 1, GO!
+James : Continuamos na volta  0  . Tenha paciência!
+James : Alô! Estamos na volta  1  . Segura a posição!
+James : Alô! Estamos na volta  2  . Segura a posição!
+James : Alô! Estamos na volta  3  . Segura a posição!
+James : Alô! Estamos na volta  4  . Segura a posição!
+James : Alô! Estamos na volta  5  . Segura a posição!
+James : Alô! Estamos na volta  6  . Segura a posição!
+James : Alô! Estamos na volta  7  . Segura a posição!
+James : Alô! Estamos na volta  8  . Segura a posição!
+James : Alô! Estamos na volta  9  . Segura a posição!
+James : Alô! Estamos na volta  10  . Segura a posição!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+James : Piloto, na escuta? Temos um Setup novo, o  Pitstop ,  para você! Box box box!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+Binotto : Estratégia A é o foco! Trocando o pneu para o tipo medium e no estado fresh na troca de número 1
+James : Alô! Estamos na volta  11  . Segura a posição!
+James : Alô! Estamos na volta  12  . Segura a posição!
+James : Alô! Estamos na volta  13  . Segura a posição!
+James : Alô! Estamos na volta  14  . Segura a posição!
+James : Alô! Estamos na volta  15  . Segura a posição!
+James : Alô! Estamos na volta  16  . Segura a posição!
+James : Alô! Estamos na volta  17  . Segura a posição!
+James : Alô! Estamos na volta  18  . Segura a posição!
+James : Alô! Estamos na volta  19  . Segura a posição!
+James : Alô! Estamos na volta  20  . Segura a posição!
+James : Alô! Estamos na volta  21  . Segura a posição!
+James : Alô! Estamos na volta  22  . Segura a posição!
+James : Alô! Estamos na volta  23  . Segura a posição!
+James : Alô! Estamos na volta  24  . Segura a posição!
+James : Alô! Estamos na volta  25  . Segura a posição!
+James : Alô! Estamos na volta  26  . Segura a posição!
+James : Alô! Estamos na volta  27  . Segura a posição!
+James : Alô! Estamos na volta  28  . Segura a posição!
+James : Alô! Estamos na volta  29  . Segura a posição!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+James : Piloto, na escuta? Temos um Setup novo, o  Pitstop ,  para você! Box box box!
+Engenheiro: Radio check para o piloto. Checagem feita. Negativo!
+Binotto : Estratégia A é o foco! Trocando o pneu para o tipo hard e no estado used na troca de número 2
+James : Alô! Estamos na volta  30  . Segura a posição!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+James : Piloto, na escuta? Temos um Setup novo, o  Pitstop ,  para você! Box box box!
+Engenheiro: Radio check para o piloto. Checagem feita. Negativo!
+James : Pneu  hard  no estado  used  continua na pista!
+James : Alô! Estamos na volta  31  . Segura a posição!
+Engenheiro: Radio check para o piloto. Checagem feita. Positivo!
+James : Piloto, na escuta? Temos um Setup novo, o  Pitstop ,  para você! Box box box!
+Engenheiro: Radio check para o piloto. Checagem feita. Negativo!
+James : Pneu  hard  no estado  used  continua na pista!
+[CHECKRED FLAG]
+Binotto : Corrida finalizada
+[Som da Opera Carmem de Georges Bizet ao fundo e champagne sendo aberto]
+James : Alô piloto! Bom trabalho! P2 pra você!! Somamos  18  pontos! Parabéns!
+Equipe : A corrida de hoje foi incrível! Na próxima vamos para o primeiro lugar!
+Piloto : É isso equipe! Vamos para a próxima!
+```
+
 ## EBNF da linguagem
 
 ``` lua
@@ -55,8 +154,6 @@ VAR_TYPE = ("driver" | "driver_engineer" | "team" | "grand_prix" | "expected_sc"
 "aggressive_overtaking" | "conservative_overtaking" | "sets_of_tyres" | "lap" | "tyre")
 
 ATRIBUTE = ("type" | "status" | "availability" | "sector"| "start_lap"| "end_lap" )
-
-
 
 VALUE = STRING | INT | FLOAT | BOOLEAN | TUPLE_INT | TUPLE_DRS | TYRE | TYRE_SET | OPERACAO
 
