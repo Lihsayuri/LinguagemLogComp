@@ -35,16 +35,16 @@ CHECKRED FLAG
 
 Indicando que tudo está desligado e que nenhuma estratégia foi definida. 
 
-Observação: Troquei tudo para o rply, ambas as versões são iguais, mas a partir da próxima etapa só utilizarei o Rply.
+**Observação:** Antes de entregar a etapa 2, troquei tudo para o rply, ambas as versões são iguais, mas a partir da próxima etapa só utilizarei o Rply. Essa entrega está na pasta `RplyVersion`
 
 ## Terceira tarefa
 
 Para fazer a terceira tarefa - no caso, para o conceito B - implementei o compilador da linguagem em Python com base no que aprendemos com o compilador desenvolvido na disciplina. A linguagem sofreu alterações importantes:
 
 - Agora existem apenas 3 tipos de variáveis: lap (INT), driver (String), tyre ({tipo do pneu, status do pneu})
-- O objetivo é criar estratégias de troca de pneu. Para isso temos condições que podem ser feitas com o `radio_check` e temos `Setup`s que podem ser construídos e chamados durantes voltas específicas da corrida.
-- Além disso, temos o loop principal da corrida que possui a volta inicial e a volta final.
-- Temos operações como +, -, >, < , igualdade.
+- O objetivo é criar estratégias de troca de pneu para uma corrida. Para isso temos condições que podem ser feitas com o `radio_check` e temos `Setup`s que podem ser construídos e chamados durantes voltas específicas da corrida.
+- Temos operações como +, -, >, < , igualdade("equals").
+- Além disso, temos o loop principal da corrida que é inicializado com a volta inicial e a volta final.
 
 No final, o programa vai de maneira divertida indicar ao programador em que posição seu piloto terminou, considerando alguns cenários como safety car e batidas.
 
@@ -69,7 +69,6 @@ radio_check voltas + 2 > 30 then >> pneu_atual is call Pitstop need(pneu_atual) 
 EngineOff
 FINISH
 ```
-
 
 Exemplo de output para o input apresentado: 
 
@@ -144,143 +143,42 @@ a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z)
 
 NUMBER = (1, 2, 3, 4, 5, 6, 7, 8, 9, 0)
 
-SECTOR = ("sector1" | "sector2" | "sector3")
+TYRE_TYPE = ("soft" | "medium" | "hard" )
 
-TYRE_TYPE = ("soft" | "medium" | "hard" | "intermediate" | "wet")
+TYRE_STATUS = ("fresh" | "used" )
 
-TYRE_STATUS = ("fresh" | "lil_used" | "too_used")
+VAR_TYPE = ("driver" | "lap" | "tyre")
 
-VAR_TYPE = ("driver" | "driver_engineer" | "team" | "grand_prix" | "expected_sc" | "rain_probability" | "drs_usage" | 
-"aggressive_overtaking" | "conservative_overtaking" | "sets_of_tyres" | "lap" | "tyre")
-
-ATRIBUTE = ("type" | "status" | "availability" | "sector"| "start_lap"| "end_lap" )
-
-VALUE = STRING | INT | FLOAT | BOOLEAN | TUPLE_INT | TUPLE_DRS | TYRE | TYRE_SET | OPERACAO
+VALUE = STRING | INT | TYRE | OPERACAO
 
 STRING = {LETTER}
 
 INT = {NUMBER}+
 
-FLOAT = INT, ".", INT
-
-BOOLEAN = ("True" | "False")
-
-TUPLE_INT = "(", INT, ",", INT, ")"
-
-TUPLE_DRS = "(", SECTOR, {",",SECTOR}, ",", INT, ")"
-
 TYRE = "{", TYRE_TYPE, ",", TYRE_STATUS, "}"
-
-TYRE_SET = "{", TYRE, {",", TYRE}, "}"
 
 IDENTIFIER = (LETTER| "_") , {LETTER | "_" | NUMBER}
 
-REF_VAR_ATRIBUTE = ATRIBUTE, "of.", IDENTIFIER
+OPERACAO = (INT | IDENTIFIER), {("+" | "-" | "<" | ">", "equals" ), (INT | IDENTIFIER)}
 
-OPERACAO = (INT | IDENTIFIER), {("+" | "-" | "<" | ">" | ">=" | "<="), (INT | IDENTIFIER)}
-
-STRUCTURE = "ITS LIGHTS OUT AND AWAY WE GO", PROGRAM , "CHECKERED FLAG"
+STRUCTURE = "START", PROGRAM , "FINISH"
  
+PROGRAM = {VAR_TYPE, IDENTIFIER, "is",  VALUE, "\n" | "EngineOn", RaceLoop, PROGRAM, "EngineOff", "\n"| "SetUp", SetUpFunction, PROGRAM, "Radio_off", "\n"| "radio_check", radiocheckCondition, PROGRAM, "Copy!", "\n" ,  ["no_response >>", PROGRAM, "Copy!", "\n"] |
+"call", callSetUp, "\n"}
 
+RaceLoop = "[", INT, ",", INT, "]"
 
-PROGRAM = {VAR_TYPE, IDENTIFIER, "is",  VALUE, "\n" | "EngineOn", RaceLoop, PROGRAM, "EngineOff", "\n"| "SetUp", SetUpFunction, PROGRAM, "Radio_off", "\n"| "radio_check", radiocheckCondition, PROGRAM, "-Copy!", "\n" ,  ["no_response >>", PROGRAM, "-Copy!", "\n"] |
-"call", callSetUp, "-Copy!","\n"}
+SetUpFunction = VAR_TYPE, IDENTIFIER,  "need", "(", VAR_TYPE, IDENTIFIER, {",", VAR_TYPE, IDENTIFIER} , ")", "\n", "Radio_on"
 
-RaceLoop = "[", INT, "]"
+radiocheckCondition = IDENTIFIER , ("equals"| ">"| "<") , (VALUE | IDENTIFIER ), "then >>"
 
-SetUpFunction = IDENTIFIER, "need", VAR_TYPE, IDENTIFIER, {",", VAR_TYPE, IDENTIFIER}, "\n", "Radio_on"
-
-radiocheckCondition = (IDENTIFIER | REF_VAR_ATRIBUTE), ("is"| "in") , (VALUE | IDENTIFIER | REF_VAR_ATRIBUTE), {("and" | "or"), (IDENTIFIER | REF_VAR_ATRIBUTE), ("is"| "in") , (VALUE | IDENTIFIER | REF_VAR_ATRIBUTE)}, "then >>"
-
-callSetUp = IDENTIFIER, "need", VAR_TYPE, IDENTIFIER, {",", VAR_TYPE, IDENTIFIER}
+callSetUp = IDENTIFIER, "need", "(", IDENTIFIER, {",",  IDENTIFIER}, ")"
 
 ```
 
-## Diagrama Sintático da linguagem
+## Diagrama Sintático da linguagem [atualizado para versão da tarefa 3]
 
 <img src="diagrama_sintatico.drawio.png" width="800" height="600">
 
 
-
-## Exemplo do uso da linguagem
-
-```lua
-
-ITS LIGHTS OUT AND AWAY WE GO
-
-driver piloto1 is Leclerc
-driver_engineer engenheiro_piloto1 is Martin Whitmarsh
-team time_piloto1 is Ferrari
-grand_prix corrida is Bahrain
-expected_sc SC is False
-rain_probability chance_chuva is 0.2
-drs_usage uso_drs is (sector1, 3)
-aggressive_overtaking agressivo is (31,50)
-conservative_overtaking conservador is (1,28)
-sets_of_tyres conjunto is {{soft, fresh}, {medium, fresh}, {hard, fresh}, {medium, used}}
-lap voltas is 0
-tyres pneu_atual is {soft, fresh}
-
-
-SetUp Pitstop need tyres pneu, driver piloto
-Radio_on
-radio_check typeof.pneu is soft then >> typeof.pneu is medium and statusof.pneu is used -Copy!
-radio_check typeof.pneu is medium and statusof.pneu is used then >> typeof.pneu is hard and statusof.pneu is fresh -Copy!
-radio_check typeof.pneu is hard then >> typeof.pneu is medium and statusof.pneu is fresh -Copy!
-Radio_off
-
-
-SetUp expectedRain need rain_probability chance_of_rain, conservative_overtaking coservador
-Radio_on
-radio_check chance_of_rain is 0.2 then >> conservador is (1,20) -Copy!
-no_responde >> conservador is (1,30) -Copy!
-Radio_off
-
-SetUp use_DRS need drs_usage uso_drs, lap voltas, aggressive_overtaking agressivo
-Radio_on
-radio_check uso_drs > 0 and voltas in agressivo then >> availabilityof.uso_drs is availabilityof.uso_drs-1
-Radio_off
-
-EngineOn[voltas]
-radio_check voltas is 10 then >> call Pitstop need tyres pneu_atual, driver piloto1 -Copy!
-radio_check voltas is 16 then >> call use_DRS need drs_usage uso_drs, lap voltas, aggressive_overtaking agressivo -Copy!
-radio_check voltas is 21 then >> call Pitstop need tyres pneu_atual, driver piloto1 -Copy!
-radio_check voltas is 41 then >> call Pitstop need tyres pneu_atual, driver piloto1 -Copy!
-radio_check voltas is 42 then >> call use_DRS need drs_usage uso_drs, lap voltas, aggressive_overtaking agressivo -Copy!
-radio_check voltas is 45 then >> call use_DRS need drs_usage uso_drs, lap voltas, aggressive_overtaking agressivo -Copy!
-EngineOff
-
-
-CHECKERED FLAG
-
-```
-
-## Flex : análise léxica
-
-Para analisar os tokens que fazem parte do código, foi feito um programa em flex que identifica se o token pertence a linguagem ou não. Esse programa está em `f1.l`. Para compilá-lo e executá-lo basta:
-
-``` bash
-flex f1.l
-gcc lex.yy.c -o seu_programa -lfl
-./seu_programa < teste.txt 
-```
-
-## Bison : análise sintática
-
-```bash
-bison -d f1.y
-gcc -o parser f1.tab.c main.c
-./parser < entrada.txt
-```
-
-## Linkando tudo
-
-bison -d f1.y
-flex f1.l
-cc -o f1 f1.tab.c lex.yy.c -lfl -DYYDEBUG
-./f1 < teste.txt
-
-## Para rodar o código de exemplo no llvm:
-
-clang++ -o hello hello.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core`
 

@@ -35,8 +35,6 @@ class Parser:
                 node = BinOp(tokenizer.next.type, [node, Parser.parseTerm(tokenizer)])
             if tokenizer.next.type == "MINUS":    
                 node = BinOp(tokenizer.next.type, [node, Parser.parseTerm(tokenizer)])
-            if tokenizer.next.type == "OR":
-                node = BinOp(tokenizer.next.type, [node, Parser.parseTerm(tokenizer)])
  
         if tokenizer.next.type == "INT":
             sys.stderr.write(f"Erro de sintaxe: INT não esperado.Tipo atual: {tokenizer.next.type}. Caracter atual: {tokenizer.next.value}")
@@ -47,15 +45,15 @@ class Parser:
     def parseTerm(tokenizer):
         node = Parser.parseFactor(tokenizer)
         tokenizer.selectNext()
-        while tokenizer.next.type == "AND":
-            if tokenizer.next.type == "AND":
-                node = BinOp(tokenizer.next.type, [node, Parser.parseFactor(tokenizer)])
-            tokenizer.selectNext()
-        if tokenizer.next.type == "INT":
-            sys.stderr.write(f"Erro de sintaxe: INT não esperado.Tipo atual: {tokenizer.next.type}. Caracter atual: {tokenizer.next.value}")
-            sys.exit(1)
-        else:
-            return node
+        # while tokenizer.next.type == "AND":
+        #     if tokenizer.next.type == "AND":
+        #         node = BinOp(tokenizer.next.type, [node, Parser.parseFactor(tokenizer)])
+        #     tokenizer.selectNext()
+        # if tokenizer.next.type == "INT":
+        #     sys.stderr.write(f"Erro de sintaxe: INT não esperado.Tipo atual: {tokenizer.next.type}. Caracter atual: {tokenizer.next.value}")
+        #     sys.exit(1)
+        # else:
+        return node
 
  
     def parseFactor(tokenizer):

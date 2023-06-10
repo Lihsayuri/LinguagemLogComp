@@ -1,5 +1,5 @@
 import sys
-lista_palavras_reservadas = ["START", "FINISH", "radio_check", "no_response",  "EngineOn", "EngineOff", "driver", "tyre", "lap", "and", "or", "is", "equals", "not", "SetUp", "need", "checked", "call", "then","Radio_on", "Radio_off", "Copy!", "soft", "medium", "hard", "fresh", "used" ]   # na PI vai pedir versão 2.1
+lista_palavras_reservadas = ["START", "FINISH", "radio_check", "no_response",  "EngineOn", "EngineOff", "driver", "tyre", "lap",  "is", "equals", "not", "SetUp", "need", "checked", "call", "then","Radio_on", "Radio_off", "Copy!", "soft", "medium", "hard", "fresh", "used" ]   # na PI vai pedir versão 2.1
 
 class Token:
     def __init__(self, type, value):
@@ -134,10 +134,6 @@ class Tokenizer:
                                 self.next = Token("TYRE_STATE", "fresh")
                             elif palavra == "used":
                                 self.next = Token("TYRE_STATE", "used")
-                            elif palavra == "or":
-                                self.next = Token("OR", 0)
-                            elif palavra == "and":
-                                self.next = Token("AND", 0)
                             elif palavra == "is":
                                 self.next = Token("EQUAL", 0)  
                             elif palavra == "equals":

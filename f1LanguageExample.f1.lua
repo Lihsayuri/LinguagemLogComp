@@ -67,8 +67,6 @@ VAR_TYPE = ("driver" | "driver_engineer" | "team" | "grand_prix" | "expected_sc"
 
 ATRIBUTE = ("type" | "status" | "availability" | "sector"| "start_lap"| "end_lap" )
 
-
-
 VALUE = STRING | INT | FLOAT | BOOLEAN | TUPLE_INT | TUPLE_DRS | TYRE | TYRE_SET | OPERACAO
 
 STRING = {LETTER}
@@ -107,3 +105,36 @@ SetUpFunction = IDENTIFIER, "need", VAR_TYPE, IDENTIFIER, {",", VAR_TYPE, IDENTI
 radiocheckCondition = (IDENTIFIER | REF_VAR_ATRIBUTE), ("is"| "in") , (VALUE | IDENTIFIER | REF_VAR_ATRIBUTE), {("and" | "or"), (IDENTIFIER | REF_VAR_ATRIBUTE), ("is"| "in") , (VALUE | IDENTIFIER | REF_VAR_ATRIBUTE)}, "then >>"
 
 callSetUp = IDENTIFIER, "need", VAR_TYPE, IDENTIFIER, {",", VAR_TYPE, IDENTIFIER}
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+
+## Flex : análise léxica
+
+Para analisar os tokens que fazem parte do código, foi feito um programa em flex que identifica se o token pertence a linguagem ou não. Esse programa está em `f1.l`. Para compilá-lo e executá-lo basta:
+
+``` bash
+flex f1.l
+gcc lex.yy.c -o seu_programa -lfl
+./seu_programa < teste.txt 
+```
+
+## Bison : análise sintática
+
+```bash
+bison -d f1.y
+gcc -o parser f1.tab.c main.c
+./parser < entrada.txt
+```
+
+## Linkando tudo
+
+bison -d f1.y
+flex f1.l
+cc -o f1 f1.tab.c lex.yy.c -lfl -DYYDEBUG
+./f1 < teste.txt
+
+## Para rodar o código de exemplo no llvm:
+
+clang++ -o hello hello.cpp `llvm-config --cxxflags --ldflags --system-libs --libs core`

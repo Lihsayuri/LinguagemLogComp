@@ -15,9 +15,9 @@ def posicao_mensagem_final(volta_inicial, volta_final):
         bateu = random.randint(0, 1)
         if bateu == 1:
             print("James : Alô piloto! Infelizmente não pontuamos hoje. Você bateu na volta ", random.randint(volta_inicial, volta_final), " e isso custou a corrida. Espero que esteja tudo bem com você!")
-            print("Equipe : Não foi dessa vez! Vamos para a próxima!")
+            print("Equipe : Não foi dessa vez! Terminamos em ", posicao_sorteada , ". Vamos para a próxima!")
         else:
-            print("James : Alô piloto! Infelizmente não pontuamos hoje. A estratégia não foi muito boa.")
+            print("James : Alô piloto! Infelizmente não pontuamos hoje. A estratégia não foi muito boa. Terminamos em ", posicao_sorteada , ".")
             print("Equipe : Pedimos desculpas, o pitstop foi um pouco demorado e isso custou a corrida. Vamos para a próxima!")
     elif posicao_sorteada < 10 and posicao_sorteada > 3:
         safety_car = random.randint(0, 1)
@@ -42,13 +42,6 @@ def posicao_mensagem_final(volta_inicial, volta_final):
         print("Equipe : Você foi incrível! Rumo ao título!")
 
     print("Piloto : É isso equipe! Vamos para a próxima!")
-
-
-    # se ele terminar entre 1 e 10, sorteie um número entre 0 e 1. Se der 1, teve safety car e o piloto se deu bem. Mande uma mensagem feliz. Se der 0, mande uma mensagem feliz falando que a estrategia foi boa mas que poderia ter sido melhor e que estavam contando com safety car. Além disso, indique a pontuação obtida.
-    # se ele terminar ou segundo ou terceiro, mande uma mensagem feliz falando que a estrategia foi boa e que o piloto é incrível. Georges Bizet’s opera Carmen toca ao fundo.
-    # se ele terminar em primeiro, mande uma mensagem feliz falando que a estrategia foi boa e que o piloto é incrível. Toca o hino nacional do país do piloto ao fundo.
-
-
 
 
 class PrePro:
@@ -107,28 +100,7 @@ class BinOp(Node):
                 return ("lap", 1)
             else:
                 return ("lap", 0)
-        if self.value == "OR":
-            if filho_esquerda[0] == "lap" and filho_direita[0] == "lap":
-                valor1 = 0
-                valor2 = 0
-                if filho_esquerda[1] >= 1:
-                    valor1 = 1
-                if filho_direita[1] >= 1:
-                    valor2 = 1
-                return ("lap", valor1 or valor2)
-            else:
-                sys.stderr.write("Erro de tipos: operação de ou entre tipos incompatíveis")
-        if self.value == "AND":
-            if filho_esquerda[0] == "lap" and filho_direita[0] == "lap":
-                valor1 = 0
-                valor2 = 0
-                if filho_esquerda[1] >= 1:
-                    valor1 = 1
-                if filho_direita[1] >= 1:
-                    valor2 = 1
-                return ("lap", valor1 and valor2)
-            else:
-                sys.stderr.write("Erro de tipos: operação de e entre tipos incompatíveis")
+
         
 class LapVal(Node):
     def evaluate(self, symbolTable):
