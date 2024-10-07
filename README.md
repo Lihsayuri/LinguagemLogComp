@@ -1,30 +1,29 @@
 # Linguagem de Fórmula 1 - f1Strategy <img src="https://img.shields.io/static/v1?label=ConceitoA&message=Finalizado&color=success&style=flat-square&logo=ghost"/>
 
 
-## Feito por :raising_hand_woman:
+## Created by :raising_hand_woman:
 
 - Lívia Sayuri Makuta.
 
-## Objetivos do projeto :round_pushpin: :
+## Project Goals :round_pushpin: :
 
-- 27/Mar/2023: Linguagem estruturada segundo a EBNF - Tarefa #1 da lista. Estruturar a linguagem segundo o padrão EBNF.  :heavy_check_mark:
-- 08/Mai/2023: Análise Léxica e Sintática (sem análise semântica e compilação) - Tarefa #2 da lista. Utilizar as ferramentas Flex e Bison (ou semelhantes) para realizar as etapas de Análise Léxica e Sintática. :heavy_check_mark:
+- 27/Mar/2023: Structured language according to EBNF - Task #1 on the list. Structure the language according to the EBNF standard.  :heavy_check_mark:
+- 08/Mai/2023: Lexical and Syntax Analysis (without semantic analysis and compilation) - Task #2 on the list. Use tools like Flex and Bison (or similar) to perform the Lexical and Syntax Analysis steps. :heavy_check_mark:
 
 
-## Primeira tarefa
+## First Task
 
-A primeira tarefa do projeto é desenvolver ideias para a linguagem que ainda vai ser lapidada a partir da EBNF.
+The first task of the project is to develop ideas for the language that will be refined based on EBNF.
 
-Nesse sentido pensei em desenvolver uma linguagem de fórmula1 que busca montar a estratégia de corrida de um piloto ou time de fórmula1.
-Além disso, para ficar mais divertido, o objetivo final do programa é retornar uma possível conversa de rádio a partir da estratégia montada pelo usuário programador. 
+In this sense, I thought about developing a Formula 1 language that aims to build the race strategy of a driver or team. Additionally, to make it more fun, the final objective of the program is to return a possible radio conversation based on the strategy created by the user programmer.
 
-Sendo assim existem algumas limitações impostas principalmente por conta do contexto, por exemplo, uma lista não pode ser montada - já que esse tipo de variável nem existe. Todavia, existem variáveis definidas propriamente para o contexto, como tyre e sets_of_tyres.
+Therefore, there are some limitations imposed mainly due to the context. For example, a list cannot be constructed—since this type of variable doesn't exist. However, there are variables specifically defined for the context, such as `tyre` and `sets_of_tyres`.
 
-## Segunda tarefa
+## Second task
 
-A segunda tarefa do projeto é utilizar ferramentas para fazer as análises léxicas e sintática. Nesse caso, com o flex retornei todos os Tokens da linguagem e no Bison os ordenei. Além disso, temos algumas mudanças:
+The second task of the project is to use tools to perform lexical and syntax analysis. In this case, with Flex, I returned all the tokens of the language, and with Bison, I ordered them. Additionally, we have some changes:
 
-É possível fazer um programa somente com as marcações de end dos blocos. Por exemplo:
+It is possible to create a program using only the end markers of the blocks. For example:
 
 ``` txt
 ITS LIGHTS OUT AND AWAY WE GO
@@ -33,24 +32,24 @@ EngineOff
 CHECKRED FLAG
 ```
 
-Indicando que tudo está desligado e que nenhuma estratégia foi definida. 
+This indicates that everything is off and that no strategy has been defined.
 
-**Observação:** Antes de entregar a etapa 2, troquei tudo para o rply, ambas as versões são iguais, mas a partir da próxima etapa só utilizarei o Rply. Essa entrega está na pasta `RplyVersion`
+**Note:** Before submitting stage 2, I switched everything to rply; both versions are the same, but from the next stage on, I will only use Rply. This submission is in the `RplyVersion` folder.
 
-## Terceira tarefa
+## Third task
 
-Para fazer a terceira tarefa - no caso, para o conceito B - implementei o compilador da linguagem em Python com base no que aprendemos com o compilador desenvolvido na disciplina. A linguagem sofreu alterações importantes:
+For the third task—specifically for Concept B—I implemented the language compiler in Python based on what we learned from the compiler developed in the course. The language underwent significant changes:
 
-- Agora existem apenas 3 tipos de variáveis: lap (INT), driver (String), tyre ({tipo do pneu, status do pneu})
-- O objetivo é criar estratégias de troca de pneu para uma corrida. Para isso temos condições que podem ser feitas com o `radio_check` e temos `Setup`s que podem ser construídos e chamados durantes voltas específicas da corrida.
-- Temos operações como +, -, >, < , igualdade("equals").
-- Além disso, temos o loop principal da corrida que é inicializado com a volta inicial e a volta final.
+- There are now only 3 types of variables: lap (INT), driver (String), tyre ({type of tyre, status of tyre}).
+- The goal is to create tyre change strategies for a race. For this, we have conditions that can be executed with `radio_check`, and we have `Setups` that can be constructed and called during specific laps of the race.
+- We have operations like +, -, >, <, and equality ("equals").
+- Additionally, we have the main loop of the race, which is initialized with the starting lap and the final lap.
 
-No final, o programa vai de maneira divertida indicar ao programador em que posição seu piloto terminou, considerando alguns cenários como safety car e batidas.
+In the end, the program will amusingly indicate to the programmer in which position their driver finished, considering scenarios such as safety cars and crashes.
 
-**Observação**: Essa entrega está na pasta ConceitoB.
+**Note**: This submission is in the ConceitoB folder.
 
-Um exemplo de programa pode ser visto abaixo:
+An example of a program can be seen below:
 
 - `teste.txt`:
 ``` 
@@ -73,7 +72,7 @@ EngineOff
 FINISH
 ```
 
-- Output para o input apresentado: 
+- The output for the previous input: 
 
 ```
 AS LUZES SE APAGAM E LÁ VAMOS NÓS!
@@ -141,7 +140,7 @@ Equipe : Você foi incrível! Rumo ao título!
 Piloto : É isso equipe! Vamos para a próxima!
 ```
 
-- Outro input - `teste2.txt`:
+- Another input - `teste2.txt`:
 
 ```
 START
@@ -166,7 +165,7 @@ EngineOff
 FINISH
 ```
 
-- Output do `teste2.txt`:
+- Output of `teste2.txt`:
 
 ```
 AS LUZES SE APAGAM E LÁ VAMOS NÓS!
@@ -220,7 +219,7 @@ Equipe : Não foi dessa vez! Terminamos em  13 . Vamos para a próxima!
 Piloto : É isso equipe! Vamos para a próxima!
 ```
 
-- Por fim, mais um input do terceiro exemplo `teste3.txt`:
+- Finally, one more input from the third example `teste3.txt`:
 
 ```
 START
@@ -230,7 +229,7 @@ driver piloto1 is 'Hamilton'
 FINISH
 ```
 
-- Output do `teste3.txt`:
+- Output of `teste3.txt`:
 ```
 AS LUZES SE APAGAM E LÁ VAMOS NÓS!
 Engenheiro : Lap check para o piloto  12
@@ -238,7 +237,7 @@ Engenheiro : Lap check para o piloto  0
 Engenheiro : Radio check para o piloto  Hamilton
 ```
 
-## EBNF da linguagem
+## EBNF of the language
 
 ``` lua
 LETTER = (A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, 
@@ -279,7 +278,7 @@ callSetUp = IDENTIFIER, "need", "(", IDENTIFIER, {",",  IDENTIFIER}, ")"
 
 ```
 
-## Diagrama Sintático da linguagem [atualizado para versão da tarefa 3]
+## Syntax Diagram of the language [updated to version of task 3]
 
 <img src="diagrama_sintatico.drawio.png" width="800" height="600">
 
